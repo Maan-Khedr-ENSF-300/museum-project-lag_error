@@ -8,6 +8,9 @@ CREATE TABLE art_object(
 	Artist				varchar(25),
 	Year				int(4),
 	Title				varchar(30)	not null,
-	primary key (OlympicID),
-	foreign key (Country) references COUNTRY(CName)    
+    Description			varchar(100) not null,
+    Country				varchar(30) not null,
+    Epoch				varchar(20) not null,
+    
+	primary key (Id_num)  
 );
