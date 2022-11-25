@@ -1,3 +1,4 @@
+from getpass import getpass
 import mysql.connector
 import numpy as np
 
