@@ -1,6 +1,7 @@
 from getpass import getpass
 import mysql.connector
 import numpy as np
+import sys 
 
 museum=mysql.connector.connect(
     host="localhost",
@@ -17,7 +18,7 @@ users=mysql.connector.connect(
 )
 
 def log_in():
-    print("Welcom to OlympicArchery Database")
+    print("Welcom to Museum")
     print()
     user_password_class="Select "    ####wait for aidan
     username=input("Please enter you username")
@@ -45,7 +46,21 @@ def block_user():
     pass
 
 def modify_database():
-    pass
+    connection = mysql.connect(host="localhost",user="root", passwd="password", database="museum") 
+    cursor = connection.cursor() 
+    link=input("Please put the path of the database: ")
+    f = open(link)
+    full_sql = f.read()
+    if not full_sql:
+        print("Invalid Link")
+        return
+    sql_commands = full_sql.replace('\n', '').split(';')[:-1]
+    for sql_command in sql_commands: 
+        cursor.execute(sql_command)
+        cursor.close()  
+    global museum
+    museum=connection
+
 
 def admin_menu():
     pass
