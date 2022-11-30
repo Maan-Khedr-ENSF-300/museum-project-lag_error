@@ -4,7 +4,7 @@ USE museum;
 
 DROP TABLE IF EXISTS ARTIST
 CREATE TABLE ARTIST(
-	Name			int(10) not null,
+	Name			int(20) not null,
 	Date_born		int(10),
 	Date_die		int(10),
 	Country         varchar(25) not null,
@@ -14,6 +14,10 @@ CREATE TABLE ARTIST(
 
 	primary key(Name)
 );
+
+INSERT INTO ARTIST (Name, Date_born, Date_die, Country, Epoch, Main_style, Description)
+VALUES
+('Hans Holbein', 1497, 1543, 'Germany', This_era, This_style, NULL)
 
 DROP TABLE IF EXISTS art_objects;
 CREATE TABLE art_object(
