@@ -2,6 +2,19 @@ DROP DATABASE IF EXISTS museum;
 CREATE DATABASE museum; 
 USE museum;
 
+DROP TABLE IF EXISTS ARTIST
+CREATE TABLE ARTIST(
+	Name			int(10) not null,
+	Date_born		int(10),
+	Date_die		int(10),
+	Country         varchar(25) not null,
+	Epoch			varchar(25) not null,
+	Main_Style      var_char(25) not null,
+	Description 	var_char(100),	
+
+	primary key(Name)
+);
+
 DROP TABLE IF EXISTS art_objects;
 CREATE TABLE art_object(
 	Id_num				int(10) not null,
@@ -13,7 +26,9 @@ CREATE TABLE art_object(
     Epoch				varchar(20) not null,
 	Style				varchar(20) not null,
     
-	primary key (Id_num)  
+	primary key (Id_num)  ,
+	foreign key(Artist) references Artist(Name)
+
 );
 
 DROP TABLE IF EXISTS PAINTING
@@ -66,20 +81,6 @@ CREATE TABLE BORROWED(
 
 );
 
-DROP TABLE IF EXISTS ARTIST
-CREATE TABLE ARTIST(
-	Name				int(10) not null,
-	Date_born		int(10),
-	Date_die		int(10),
-	Country         varchar(25) not null,
-	Epoch			varchar(25) not null,
-	Main_Style      var_char(25) not null,
-	Description 	var_char(100),	
-
-	primary key(Name),
-	foreign key(name) references art_object(Artist)
-
-);
 
 DROP TABLE IF EXISTS COLLECTION
 CREATE TABLE COLLECTION(

@@ -17,7 +17,23 @@ users=mysql.connector.connect(
 )
 
 def log_in():
-    pass
+    print("Welcom to OlympicArchery Database")
+    print()
+    user_password_class="Select "    ####wait for aidan
+    username=input("Please enter you username")
+    # while username not in user_List:
+    #     if user=="q":
+    #         return 0
+    #     print("Invalid user")
+    #     user=input("Please enter username or q for ending this app")
+    # pwd=input("Please enter your password: ")
+    # while pwd!=user_List[user]:
+    #     if user=="q":
+    #         return 0
+    #     print("Invalid password")
+    #     user=input("Please enter your password or q for ending this app")
+    return 1
+
 
 def add_user():
     pass
@@ -58,3 +74,6 @@ def end_user():
 
 def main():
     pass
+
+
+main()
