@@ -42,6 +42,9 @@ def add_user():
 def edit_user():
     pass
 
+def remove_user():
+    pass
+
 def block_user():
     pass
 
@@ -60,6 +63,32 @@ def modify_database():
         cursor.close()  
     global museum
     museum=connection
+
+def change_user_menu():
+    choice=100
+    while choice not in range(0,4):
+        print("Please chose the number 0 to 4\n")
+        print("Press 0: Previous page \n")
+        print("Press 1: Add user\n ")
+        print("Press 2: Update user\n")
+        print("Press 3: Remove user\n")
+        print("Press 4: Block user\n")
+        choice = int(input("please chose the options: \n"))
+    return choice 
+
+def change_user():
+    choice=change_user_menu()
+    while choice!=0:
+        if choice==1:
+            add_user()
+        if choice==2:
+            edit_user()
+        if choice==3:
+            remove_user()
+        if choice==4:
+            block_user()
+        choice=change_user_menu()
+    return
 
 def admin_menu():
     choice=100
@@ -84,6 +113,8 @@ def admin():
             data_entry(3)
         if choice==4:
             end_user(3)
+        choice=admin_menu()
+    return
 
 def add_tuples():
     pass
