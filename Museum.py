@@ -61,12 +61,29 @@ def modify_database():
     global museum
     museum=connection
 
-
 def admin_menu():
-    pass
+    choice=100
+    while choice not in range(0,4):
+        print("Please chose the number 0 to 4\n")
+        print("Press 0: Quit the program \n")
+        print("Press 1: Change user information\n ")
+        print("Press 2: Change database\n")
+        print("Press 3: Change data\n")
+        print("Press 4: View data\n")
+        choice = int(input("please chose the options: \n"))
+    return choice 
 
 def admin():
-    pass
+    choice=admin_menu()
+    while choice!=0:
+        if choice==1:
+            pass
+        if choice==2:
+            pass
+        if choice==3:
+            data_entry(3)
+        if choice==4:
+            end_user(3)
 
 def add_tuples():
     pass
