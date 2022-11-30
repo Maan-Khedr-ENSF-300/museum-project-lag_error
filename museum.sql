@@ -23,13 +23,23 @@ CREATE TABLE art_object(
 	Title				varchar(30)	not null,
     Description			varchar(100) not null,
     Country				varchar(30) not null,
-    Epoch				varchar(20) not null,
+    Epoch				varchar(20) ,
 	Style				varchar(20) not null,
     
 	primary key (Id_num)  ,
 	foreign key(Artist) references Artist(Name)
 
 );
+INSERT INTO art_objects(Id_num, Artist, Year, Title, Description, Country, Epoch, Styple)
+VALUES
+('1', 'LEONARDO da Vinci','1503','Monalisa','considered an archetypal masterpice of Italian Renaissance', 'Italy','Renaissance', 'sfumato'),
+('2' ,'Vincent van Gough','1889', 'Starry night','considered to be his magnum opus', 'Netherlands', 'Post Impressionist', 'Modern Art'),
+('3','Edvand Much','1893','The sream','featuring a ghoulish figure that looks like the host from the Tales from the Crypt', null, 'Symnbolist movement'),
+('4', 'Grayson Perry','1994', 'My Gods','depicts four large figures',)
+
+
+
+
 
 DROP TABLE IF EXISTS PAINTING
 CREATE TABLE PAINTING(
@@ -40,6 +50,11 @@ CREATE TABLE PAINTING(
 	foreign key(Id_num) references art_object(Id_num)
 
 );
+INSERT INTO PAINTING(Id_num, Paint_type, Drawn_on)
+VALUES
+('1', 'Portrait','poplar wood panel'),
+('2', 'Portrait','canvas'),
+('3', 'Portrai', 'cardboard')
 
 DROP TABLE IF EXISTS SCULP_OR_STA
 CREATE TABLE SCULT_OR_STA(
