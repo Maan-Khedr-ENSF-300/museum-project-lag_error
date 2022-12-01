@@ -58,8 +58,7 @@ def add_tuples():
     cursor.executemany(sql, data)
 
 def modify_info():
-    print("Preparing to update the database")
-    
+    pass
 # work on this
 
 def data_entry_menu():
