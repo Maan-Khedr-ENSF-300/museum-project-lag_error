@@ -86,8 +86,18 @@ def add_tuples():
             edateinput = input("Enter the end date of the exhibition")
             data = (exnameinput, sdateinput, edateinput)
 
-    sql = "insert into [table] values (?, ?, ?, ?, ?, ?)" 
-    cursor.executemany(sql, data)
+    if table == "artobj":
+        sql = "insert into [artobj] values (?, ?, ?, ?, ?, ?, ?, ?)" 
+        cursor.executemany(sql, data)
+    if table == "artist":
+        sql = "insert into [artist] values (?, ?, ?, ?, ?, ?, ?)"
+        cursor.executemany(sql,data)
+    if table == "collection":
+        sql = "insert into [collection] values (?, ?, ?, ?)"
+        cursor.executemany(sql,data)
+    if table == "exhibition":
+        sql = "insert into [exhibition] values (?, ?, ?)"
+        cursor.executemany(sql,data)
 
 def modify_info():
     print("preparing to update data")
