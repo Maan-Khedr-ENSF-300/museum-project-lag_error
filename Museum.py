@@ -58,3 +58,10 @@ def end_user():
 
 def main():
     pass
+
+def add_tuple():
+    pass
+
+def modify_info():
+    pass
+
