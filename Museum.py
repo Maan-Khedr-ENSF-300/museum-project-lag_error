@@ -51,9 +51,15 @@ def add_tuples():
             lines = f.readlines()
             data = tuple(tuple(line.split()) for line in lines)
     
+    # Need to add code for a series of entries through prompts
+    # CODE GOES HERE
+
+    sql = "insert into [table] values (?, ?, ?, ?, ?, ?)" 
+    cursor.executemany(sql, data)
 
 def modify_info():
     pass
+# work on this
 
 def data_entry_menu():
     pass
