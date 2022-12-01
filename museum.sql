@@ -177,6 +177,12 @@ CREATE TABLE Users(
 	Access_Level	int(20) not null,
 	primary key(Username)
 );
+INSERT INTO Users(Username, Password, Access_Level)
+VALUES
+('Bob', 'Abc123p34', '1'),
+('Tim', 'BlueBigB', '1'),
+('Zack', '13#%@KFFc', '2')
+
 
 DROP TABLE IF EXISTS Block_List
 CREATE TABLE Block_List(
@@ -184,3 +190,8 @@ CREATE TABLE Block_List(
 	Blocked_Date	varchar(20) not null,
 	foreign key(Username) references Users(Username),
 )
+INSERT INTO Block_List(Username, Blocked_Date)
+VALUES
+('Joe', 'May 4 2021'),
+('Zoe', 'Jan 8 2019'),
+('ThatGuy', 'Feb 28 2020')
