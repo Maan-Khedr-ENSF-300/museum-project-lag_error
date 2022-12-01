@@ -14,3 +14,8 @@ CREATE TABLE art_object(
     
 	primary key (Id_num)  
 );
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users(
+	
+)
