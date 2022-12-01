@@ -173,7 +173,7 @@ VALUES
 DROP TABLE IF EXISTS Users
 CREATE TABLE Users(
 	Username		varchar(30) not null,
-	Psword			varchar(30) not null,
+	Password		varchar(30) not null,
 	Access_Level	int(20) not null,
 	primary key(Username)
 );
