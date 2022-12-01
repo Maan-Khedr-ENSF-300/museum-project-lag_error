@@ -5,11 +5,11 @@ USE museumusers;
 DROP TABLE IF EXISTS Users
 CREATE TABLE Users(
 	Username		varchar(30) not null,
-	Password		varchar(30) not null,
+	Passwrd		varchar(30) not null,
 	Access_Level	int(20) not null,
 	primary key(Username)
 );
-INSERT INTO Users(Username, Password, Access_Level)
+INSERT INTO Users(Username, Passwrd, Access_Level)
 VALUES
 ('Bob', 'Abc123p34', '1'),
 ('Tim', 'BlueBigB', '1'),
