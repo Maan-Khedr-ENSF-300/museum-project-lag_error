@@ -101,7 +101,13 @@ def add_tuples():
 
 def modify_info():
     print("preparing to update data")
+    connection = mysql.connect(host="localhost", user="root", passwd="password", database="users")
+    cursor = connection.cursor()
+    print("Options:")
+    print("artobj, artist, collection, exhibition")
+    table = input("Please enter the table for data insertion.")
 
+    
 # work on this
 
 def data_entry_menu():
