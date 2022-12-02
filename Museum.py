@@ -107,7 +107,19 @@ def modify_info():
     print("artobj, artist, collection, exhibition")
     table = input("Please enter the table for data insertion.")
 
-
+    # Fnction will update info for art object, artist, exhibition, collection. 
+    if table == "artobj":
+        pass
+        # add code here
+    if table == "artist":
+        pass
+        # add code here
+    if table == "collection":
+        pass
+        #add code here
+    if table == "exhibition":
+        pass
+        # add code here#
 # work on this
 
 def data_entry_menu():
