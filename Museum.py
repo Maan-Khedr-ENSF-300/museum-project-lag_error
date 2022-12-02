@@ -43,9 +43,9 @@ def add_tuples():
     cursor = connection.cursor()
     print("Options:")
     print("artobj, artist, collection, exhibition")
-    table = input("Please enter the table for data insertion.")
+    table = input("Please enter the table for data insertion. Entries are case sensitive:")
 
-    choice = input("Enter 1 to provide file, enter 2 to use prompts")
+    choice = input("Enter 1 to provide file, enter 2 to use prompts:")
     choice = int(choice)
 
     if choice == 1:
@@ -64,7 +64,7 @@ def add_tuples():
             Cntryinput = input("Enter the country for the piece")
             Epocinput = input("Enter epoc")
             Styleinput = input("Enter the style of the art")
-            data = (idnoinput, artistinput, yearinput, titleinput, Dscrpinput, Cntryinput, Epocinput, Styleinput)
+            data = tuple(idnoinput, artistinput, yearinput, titleinput, Dscrpinput, Cntryinput, Epocinput, Styleinput)
         if table == "artist":
             nameinput = input("Enter the artist's name")
             dborninput = input("Enter the year they were born")
@@ -73,18 +73,18 @@ def add_tuples():
             epoch2input = input("Enter their era")
             mstyleinput = input("Enter their main style")
             descinput = input("Enter a description of them")
-            data = (nameinput, dborninput, ddieinput, contryinput, epoch2input, mstyleinput, descinput)
+            data = tuple(nameinput, dborninput, ddieinput, contryinput, epoch2input, mstyleinput, descinput)
         if table == "collection":
             colnameinput = input("Enter the name of the collection")
             typeinput = input("Enter the type of the collection")
             dcrinput = input("Enter description of the collection")
             pnuminput = input("Enter current pnumber")
-            data = (colnameinput, typeinput, dcrinput, pnuminput)
+            data = tuple(colnameinput, typeinput, dcrinput, pnuminput)
         if table == "exhibition":
             exnameinput = input("Enter the name of the exhibition")
             sdateinput = input("Enter the startdate of the exhibition")
             edateinput = input("Enter the end date of the exhibition")
-            data = (exnameinput, sdateinput, edateinput)
+            data = tuple(exnameinput, sdateinput, edateinput)
 
     if table == "artobj":
         sql = "insert into [artobj] values (?, ?, ?, ?, ?, ?, ?, ?)" 
