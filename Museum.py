@@ -39,13 +39,13 @@ def admin():
 
 def add_tuples():
     print("Preparing to insert new tuple(s) into a table in the database.")
-    connection = mysql.connect(host="localhost", user="root", passwd="password", database="users")
+    connection = mysql.connect(host="localhost", user="root", passwd="password", database="museum")
     cursor = connection.cursor()
     print("Options:")
     print("artobj, artist, collection, exhibition")
-    table = input("Please enter the table for data insertion.")
+    table = input("Please enter the table for data insertion. Entries are case sensitive:")
 
-    choice = input("Enter 1 to provide file, enter 2 to use prompts")
+    choice = input("Enter 1 to provide file, enter 2 to use prompts:")
     choice = int(choice)
 
     if choice == 1:
@@ -64,7 +64,7 @@ def add_tuples():
             Cntryinput = input("Enter the country for the piece")
             Epocinput = input("Enter epoc")
             Styleinput = input("Enter the style of the art")
-            data = (idnoinput, artistinput, yearinput, titleinput, Dscrpinput, Cntryinput, Epocinput, Styleinput)
+            data = tuple(idnoinput, artistinput, yearinput, titleinput, Dscrpinput, Cntryinput, Epocinput, Styleinput)
         if table == "artist":
             nameinput = input("Enter the artist's name")
             dborninput = input("Enter the year they were born")
@@ -73,18 +73,18 @@ def add_tuples():
             epoch2input = input("Enter their era")
             mstyleinput = input("Enter their main style")
             descinput = input("Enter a description of them")
-            data = (nameinput, dborninput, ddieinput, contryinput, epoch2input, mstyleinput, descinput)
+            data = tuple(nameinput, dborninput, ddieinput, contryinput, epoch2input, mstyleinput, descinput)
         if table == "collection":
             colnameinput = input("Enter the name of the collection")
             typeinput = input("Enter the type of the collection")
             dcrinput = input("Enter description of the collection")
             pnuminput = input("Enter current pnumber")
-            data = (colnameinput, typeinput, dcrinput, pnuminput)
+            data = tuple(colnameinput, typeinput, dcrinput, pnuminput)
         if table == "exhibition":
             exnameinput = input("Enter the name of the exhibition")
             sdateinput = input("Enter the startdate of the exhibition")
             edateinput = input("Enter the end date of the exhibition")
-            data = (exnameinput, sdateinput, edateinput)
+            data = tuple(exnameinput, sdateinput, edateinput)
 
     if table == "artobj":
         sql = "insert into [artobj] values (?, ?, ?, ?, ?, ?, ?, ?)" 
@@ -101,13 +101,25 @@ def add_tuples():
 
 def modify_info():
     print("preparing to update data")
-    connection = mysql.connect(host="localhost", user="root", passwd="password", database="users")
+    connection = mysql.connect(host="localhost", user="root", passwd="password", database="museum")
     cursor = connection.cursor()
     print("Options:")
     print("artobj, artist, collection, exhibition")
     table = input("Please enter the table for data insertion.")
 
-    
+    # Fnction will update info for art object, artist, exhibition, collection. 
+    if table == "artobj":
+        pass
+        # add code here
+    if table == "artist":
+        pass
+        # add code here
+    if table == "collection":
+        pass
+        #add code here
+    if table == "exhibition":
+        pass
+        # add code here#
 # work on this
 
 def data_entry_menu():
