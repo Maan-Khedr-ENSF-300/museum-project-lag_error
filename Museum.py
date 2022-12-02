@@ -39,7 +39,7 @@ def admin():
 
 def add_tuples():
     print("Preparing to insert new tuple(s) into a table in the database.")
-    connection = mysql.connect(host="localhost", user="root", passwd="password", database="users")
+    connection = mysql.connect(host="localhost", user="root", passwd="password", database="museum")
     cursor = connection.cursor()
     print("Options:")
     print("artobj, artist, collection, exhibition")
@@ -101,13 +101,13 @@ def add_tuples():
 
 def modify_info():
     print("preparing to update data")
-    connection = mysql.connect(host="localhost", user="root", passwd="password", database="users")
+    connection = mysql.connect(host="localhost", user="root", passwd="password", database="museum")
     cursor = connection.cursor()
     print("Options:")
     print("artobj, artist, collection, exhibition")
     table = input("Please enter the table for data insertion.")
 
-    
+
 # work on this
 
 def data_entry_menu():
