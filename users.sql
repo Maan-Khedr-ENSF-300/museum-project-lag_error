@@ -13,7 +13,10 @@ INSERT INTO Users(Username, Passwrd, Access_Level)
 VALUES
 ('Bob', 'Abc123p34', '1'),
 ('Tim', 'BlueBigB', '1'),
-('Zack', '13#%@KFFc', '2')
+('Zack', '13#%@KFFc', '2'),
+('Joe', 'password', '1'),
+('Zoe', '1234','1'),
+('ThatGuy', '20020202','1')
 
 
 DROP TABLE IF EXISTS Block_List
