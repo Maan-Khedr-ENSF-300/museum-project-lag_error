@@ -98,6 +98,7 @@ def add_tuples():
     if table == "exhibition":
         sql = "insert into [exhibition] values (?, ?, ?)"
         cursor.executemany(sql,data)
+    connection.commit()
 
 def modify_info():
     print("preparing to update data")
@@ -109,6 +110,11 @@ def modify_info():
 
     # Fnction will update info for art object, artist, exhibition, collection. 
     if table == "artobj":
+        print("")
+        userinput = print("What is the new value to enter:")
+        cursor.execute(f"UPDATE artobj SET attribute_1 ='{userinput}',WHERE Id_num = '{row}'")
+        connection.commit()
+
         pass
         # add code here
     if table == "artist":
