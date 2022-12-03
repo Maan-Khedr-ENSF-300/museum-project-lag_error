@@ -70,7 +70,10 @@ def input_sql():
         return
 
 def add_user():
-    pass
+    username=input("Please input new username: ")
+    password=input("Please input new password: ")
+    user_type=input("Please input user type (1-end user, 2-data entry, 3-admin): ")
+    data=
 
 def edit_user():
     pass
