@@ -22,7 +22,7 @@ cur_user=users.cursor()
 def log_in():
     print("Welcom to Museum")
     print()
-    cur_user.execute="Select Username from USER"
+    cur_user.execute="Select Username from Users"
     user_list=[cur_user.fetchall()]
 
     username=input("Please enter you username")
@@ -33,7 +33,7 @@ def log_in():
         print("Invalid user")
         user=input("Please enter username or q for ending this app")
     
-    cur_user.execute="Select from USER where Username=%f",username  
+    cur_user.execute="Select * from Users where Username=%s"%(username)  
     user=cur_user.fetchone()
     
     pwd=input("Please enter your password: ")
@@ -42,7 +42,22 @@ def log_in():
             return 0
         print("Invalid password")
         user=input("Please enter your password or q for ending this app")
-    return 1
+
+    cur_user.execute="Select Username from Block_List where Username=%s"%(username)
+    blocked=[cur_user.fetchall()]
+    if blocked!=[]:
+        print("Sorry, user is blocked.")
+        return
+    return user[2]
+'''
+    if user[2]==1:
+        end_user()
+    elif user[2]==2:
+        data_entry()
+    elif user[2]==3:
+        admin()
+'''
+
 
 def input_sql():
     choice=input("Which one are you changing? 1-Museum, 2-User")
