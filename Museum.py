@@ -16,25 +16,43 @@ users=mysql.connector.connect(
     passwd="password",
     database="users"
 )
+cur_museum=museum.cursor()
+cur_user=users.cursor()
 
 def log_in():
     print("Welcom to Museum")
     print()
-    user_password_class="Select "    ####wait for aidan
+    cur_user.execute="Select Username from USER"
+    user_list=[cur_user.fetchall()]
+
     username=input("Please enter you username")
-    # while username not in user_List:
-    #     if user=="q":
-    #         return 0
-    #     print("Invalid user")
-    #     user=input("Please enter username or q for ending this app")
-    # pwd=input("Please enter your password: ")
-    # while pwd!=user_List[user]:
-    #     if user=="q":
-    #         return 0
-    #     print("Invalid password")
-    #     user=input("Please enter your password or q for ending this app")
+
+    while username not in user_list:
+        if username=="q":
+             return 0
+        print("Invalid user")
+        user=input("Please enter username or q for ending this app")
+    
+    cur_user.execute="Select from USER where Username=%f",username  
+    user=cur_user.fetchone()
+    
+    pwd=input("Please enter your password: ")
+    while pwd!=user[1]:
+        if user=="q":
+            return 0
+        print("Invalid password")
+        user=input("Please enter your password or q for ending this app")
     return 1
 
+def input_sql():
+    choice=input("Which one are you changing? 1-Museum, 2-User")
+    command=input("Please input command for SQL:")
+    if choice==1:
+        cur_museum.execute(command)
+    elif choice==2:
+        cur_user.execute(command)
+    else: 
+        return
 
 def add_user():
     pass
@@ -136,7 +154,7 @@ def end_user():
 
 
 def main():
-    pass
+    log_in()
 
 
-main()
+#main()
