@@ -73,7 +73,11 @@ def add_user():
     username=input("Please input new username: ")
     password=input("Please input new password: ")
     user_type=input("Please input user type (1-end user, 2-data entry, 3-admin): ")
-    data=
+    val=(username, password, user_type)
+    command="INSERT INTO Users (Username, password, user_type) VALUES (%s,%s,%s)"
+    cur_user.execute(command,val)
+    print("User added successfully")
+    return
 
 def edit_user():
     pass
@@ -128,13 +132,14 @@ def change_user():
 
 def admin_menu():
     choice=100
-    while choice not in range(0,4):
-        print("Please chose the number 0 to 4\n")
+    while choice not in range(0,5):
+        print("Please chose the number 0 to 5\n")
         print("Press 0: Quit the program \n")
         print("Press 1: Change user information\n ")
         print("Press 2: Change database\n")
         print("Press 3: Change data\n")
         print("Press 4: View data\n")
+        print("Press 5: Direct input sql command")
         choice = int(input("please chose the options: \n"))
     return choice 
 
@@ -142,13 +147,15 @@ def admin():
     choice=admin_menu()
     while choice!=0:
         if choice==1:
-            pass
+            change_user()
         if choice==2:
-            pass
+            modify_database()
         if choice==3:
             data_entry(3)
         if choice==4:
             end_user(3)
+        if choice==5:
+            input_sql()
         choice=admin_menu()
     return
 
