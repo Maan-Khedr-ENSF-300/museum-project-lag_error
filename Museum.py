@@ -14,7 +14,7 @@ users=mysql.connector.connect(
     host="localhost",
     user="root",
     passwd="password",
-    database="users"
+    database="museumusers"
 )
 cur_museum=museum.cursor()
 cur_user=users.cursor()
@@ -22,26 +22,33 @@ cur_user=users.cursor()
 def log_in():
     print("Welcom to Museum")
     print()
-    cur_user.execute="Select Username from Users"
-    user_list=[cur_user.fetchall()]
+    # users=cur_user.fetchall()
+    # user_list=[i[2:-2] for i in users]
+    # for each in user_list:
+    #     print(each)
+    username=input("Please enter you username: ")
+    cur_user.execute("select Username from Userswhere Username=%s"%(username))
+    user_list=cur_user.fetchone()
+    for i in user_list:
+        print(i)
 
-    username=input("Please enter you username")
-
-    while username not in user_list:
+    while user_list:
         if username=="q":
-             return 0
+            return 0
         print("Invalid user")
-        user=input("Please enter username or q for ending this app")
+        username=input("Please enter username or q for ending this app: ")
+        cur_user.execute("select Username from Userswhere Username=%s"%(username))
+
     
-    cur_user.execute="Select * from Users where Username=%s"%(username)  
+    cur_user.execute("Select * from Users where Username=%s"%(username))  
     user=cur_user.fetchone()
     
     pwd=input("Please enter your password: ")
     while pwd!=user[1]:
-        if user=="q":
+        if pwd=="q":
             return 0
         print("Invalid password")
-        user=input("Please enter your password or q for ending this app")
+        pwd=input("Please enter your password or q for ending this app")
 
     cur_user.execute="Select Username from Block_List where Username=%s"%(username)
     blocked=[cur_user.fetchall()]
