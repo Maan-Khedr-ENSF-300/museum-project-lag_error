@@ -27,35 +27,31 @@ def log_in():
     # for each in user_list:
     #     print(each)
     username=input("Please enter you username: ")
-    cur_user.execute("select Username from Userswhere Username=%s"%(username))
+    cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':username})
     user_list=cur_user.fetchone()
-    for i in user_list:
-        print(i)
 
-    while user_list:
+    while user_list==[]:
         if username=="q":
             return 0
         print("Invalid user")
         username=input("Please enter username or q for ending this app: ")
-        cur_user.execute("select Username from Userswhere Username=%s"%(username))
+        cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':username})
 
-    
-    cur_user.execute("Select * from Users where Username=%s"%(username))  
-    user=cur_user.fetchone()
-    
+        
     pwd=input("Please enter your password: ")
-    while pwd!=user[1]:
+    while pwd!=user_list[1]:
         if pwd=="q":
             return 0
         print("Invalid password")
         pwd=input("Please enter your password or q for ending this app")
 
-    cur_user.execute="Select Username from Block_List where Username=%s"%(username)
-    blocked=[cur_user.fetchall()]
-    if blocked!=[]:
+    cur_user.execute("Select Username from Block_List where Username=%(Username)s",{'Username':username})
+    blocked=[cur_user.fetchone()]
+
+    if blocked[0]:
         print("Sorry, user is blocked.")
         return
-    return user[2]
+    return user_list[2]
 '''
     if user[2]==1:
         end_user()
@@ -187,6 +183,6 @@ def end_user():
 
 def main():
     usertype=log_in()
-
+    print(usertype)
 
 main()
