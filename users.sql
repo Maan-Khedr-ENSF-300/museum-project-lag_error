@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS museumusers;
 CREATE DATABASE museumusers; 
 USE museumusers;
 
-DROP TABLE IF EXISTS Users
+DROP TABLE IF EXISTS Users;
 CREATE TABLE Users(
 	Username		varchar(30) not null,
 	Passwrd		varchar(30) not null,
@@ -16,15 +16,15 @@ VALUES
 ('Zack', '13#%@KFFc', '2'),
 ('Joe', 'password', '1'),
 ('Zoe', '1234','1'),
-('ThatGuy', '20020202','1')
+('ThatGuy', '20020202','1');
 
 
-DROP TABLE IF EXISTS Block_List
+DROP TABLE IF EXISTS Block_List;
 CREATE TABLE Block_List(
 	Username		varchar(30) not null,
 	Blocked_Date	varchar(20) not null,
-	foreign key(Username) references Users(Username),
-)
+	foreign key(Username) references Users(Username)
+);
 INSERT INTO Block_List(Username, Blocked_Date)
 VALUES
 ('Joe', 'May 4 2021'),
