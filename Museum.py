@@ -179,7 +179,7 @@ def end_user():
 
 
 def main():
-    log_in()
+    usertype=log_in()
 
 
-#main()
+main()
