@@ -19,18 +19,16 @@ users=mysql.connector.connect(
 cur_museum=museum.cursor()
 cur_user=users.cursor()
 
+
 def log_in():
     print("Welcom to Museum")
     print()
-    # users=cur_user.fetchall()
-    # user_list=[i[2:-2] for i in users]
-    # for each in user_list:
-    #     print(each)
+
     username=input("Please enter you username: ")
     cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':username})
     user_list=cur_user.fetchone()
 
-    while user_list==[]:
+    while user_list is None:
         if username=="q":
             return 0
         print("Invalid user")
@@ -52,14 +50,6 @@ def log_in():
         print("Sorry, user is blocked.")
         return
     return user_list[2]
-'''
-    if user[2]==1:
-        end_user()
-    elif user[2]==2:
-        data_entry()
-    elif user[2]==3:
-        admin()
-'''
 
 
 def input_sql():
@@ -77,19 +67,92 @@ def add_user():
     password=input("Please input new password: ")
     user_type=input("Please input user type (1-end user, 2-data entry, 3-admin): ")
     val=(username, password, user_type)
-    command="INSERT INTO Users (Username, password, user_type) VALUES (%s,%s,%s)"
+    command="INSERT INTO Users(Username, Passwrd, Access_Level) VALUES (%s,%s,%s)"
     cur_user.execute(command,val)
     print("User added successfully")
     return
 
 def edit_user():
-    pass
+    alter_user=input("Which user you would like to change? ")
+    cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':alter_user})
+    user_list=cur_user.fetchone()
+    while user_list is None:
+        if alter_user=="q":
+            return 0
+        print("Invalid user")
+        alter_user=input("Please enter username or q for previous page: ")
+        cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':alter_user})
+
+    edit_info=input("Please input the attribute you would like to update (Username/Passwrd/Access_Level):")
+    new_info=input("Please input the new information:")
+    command=("Update Users SET %s=%s Where Username=%(Username)s")
+    value=(edit_info,new_info,alter_user)
+    cur_user.execute(command,value)
+    print("User edited successfully")
+    return
 
 def remove_user():
-    pass
+    del_user=input("Which user you would like to change? ")
+    cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':del_user})
+    user_list=cur_user.fetchone()
+    while user_list is None:
+        if del_user=="q":
+            return 0
+        print("Invalid user")
+        del_user=input("Please enter username or q for previous page: ")
+        cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':del_user})
+    
+    cur_user.execute("Select * from Block_List where Username=%(Username)s",{'Username':del_user})
+    user_list=cur_user.fetchone()
+    if user_list is not None:
+        command=("Delete from Block_List Where Username=%(Username)s")
+        cur_user.execute(command,{'Username':del_user})
 
-def block_user():
-    pass
+
+    command=("Delete from Users Where Username=%(Username)s")
+    cur_user.execute(command,{'Username':del_user})
+
+
+    print("User deleted successfully")
+    return
+
+
+def block_unblock_user():
+    change_user=input("Which user you would like to change his/her block state? ")
+    cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':change_user})
+    user_list=cur_user.fetchone()
+    while user_list is None:
+        if del_user=="q":
+            return 0
+        print("Invalid user")
+        del_user=input("Please enter username or q for previous page: ")
+        cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':change_user})
+    
+    cur_user.execute("Select * from Block_List where Username=%(Username)s",{'Username':change_user})
+    user_list=cur_user.fetchone()
+    if user_list is None:
+        date=input("The date of the block starts is:")
+        value=(change_user, date)
+        command="INSERT INTO Block_List (Username, Blocked_Date) VALUES (%(Username)s,%(Block_Date)s)"
+        print("This user is being blocked")
+    else:
+        command=("Delete from Block_List Where Username=%(Username)s")
+        value={'Username':change_user}
+        print("This user is unblocked")
+    
+    cur_user.execute(command,value)
+
+def show_user():
+    cur_user.execute("Select Username, Passwrd, Access_Level from Users Where Access_Level<>3")
+    print("{:<15}, {:<15}, {}".format("Username", "Password", "Access Level"))
+    for (Username, Passwrd, Access_Level) in cur_user:
+        print("{:<15}, {:<15}, {}".format(Username, Passwrd, Access_Level))
+
+def show_block_list():
+    cur_user.execute("Select Username, Blocked_Date from Block_List")
+    print("{:<15}, {:<15}".format("Username", "Block Date"))
+    for (Username, Block_Date) in cur_user:
+        print("{:<15}, {:<15}".format(Username, Block_Date))
 
 def modify_database():
     connection = mysql.connect(host="localhost",user="root", passwd="password", database="museum") 
@@ -109,13 +172,15 @@ def modify_database():
 
 def change_user_menu():
     choice=100
-    while choice not in range(0,4):
-        print("Please chose the number 0 to 4\n")
+    while choice not in range(0,7):
+        print("Please chose the number 0 to 6\n")
         print("Press 0: Previous page \n")
         print("Press 1: Add user\n ")
         print("Press 2: Update user\n")
         print("Press 3: Remove user\n")
-        print("Press 4: Block user\n")
+        print("Press 4: Block/Unblock user\n")
+        print("Press 5: View all non-admin users\n")
+        print("Press 6: View all blocked users\n")
         choice = int(input("please chose the options: \n"))
     return choice 
 
@@ -129,13 +194,17 @@ def change_user():
         if choice==3:
             remove_user()
         if choice==4:
-            block_user()
+            block_unblock_user()
+        if choice==5:
+            show_user()
+        if choice==6:
+            show_block_list()
         choice=change_user_menu()
     return
 
 def admin_menu():
     choice=100
-    while choice not in range(0,5):
+    while choice not in range(0,6):
         print("Please chose the number 0 to 5\n")
         print("Press 0: Quit the program \n")
         print("Press 1: Change user information\n ")
@@ -182,7 +251,6 @@ def end_user():
 
 
 def main():
-    usertype=log_in()
-    print(usertype)
-
+    admin()
+    #log_in()
 main()
