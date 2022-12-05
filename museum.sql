@@ -18,7 +18,7 @@ INSERT INTO ARTIST (Name, Date_born, Date_die, Country, Epoch, Main_style, Descr
 VALUES
 ('Hans Holbein', 1497, 1543, 'Germany', This_era, This_style, NULL)
 
-DROP TABLE IF EXISTS art_objects;
+DROP TABLE IF EXISTS art_object;
 CREATE TABLE art_object(
     Id_num              int(10) not null,
     Artist              varchar(25),
@@ -33,7 +33,7 @@ CREATE TABLE art_object(
     foreign key(Artist) references Artist(Name)
 
 );
-INSERT INTO art_objects(Id_num, Artist, Year, Title, Description, Country, Epoch, Styple)
+INSERT INTO art_object(Id_num, Artist, Year, Title, Description, Country, Epoch, Styple)
 VALUES
 ('1', 'LEONARDO da Vinci','1503','Monalisa','considered an archetypal masterpice of Italian Renaissance', 'Italy','Renaissance', 'sfumato'),
 ('2' ,'Vincent van Gough','1889', 'Starry night','considered to be his magnum opus', 'Netherlands', 'Post Impressionist', 'Modern Art'),

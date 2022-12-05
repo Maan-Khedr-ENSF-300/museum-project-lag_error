@@ -87,16 +87,16 @@ def add_tuples():
             data = tuple(exnameinput, sdateinput, edateinput)
 
     if table == "artobj":
-        sql = "insert into art_object values (?, ?, ?, ?, ?, ?, ?, ?)" 
+        sql = "INSERT INTO art_object (Id_num, Artist, Year, Title, Description, Country, Epoch, Style) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)" 
         cursor.executemany(sql, data)
     if table == "artist":
-        sql = "insert into ARTIST values (?, ?, ?, ?, ?, ?, ?)"
+        sql = "INSERT INTO ARTIST (Name, Date_born, Date_die, Country, Epoch, Main_Style, Description) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         cursor.executemany(sql,data)
     if table == "collection":
-        sql = "insert into COLLECTION values (?, ?, ?, ?)"
+        sql = "INSERT INTO COLLECTION (Name, Type, Description, Current_PNumber) VALUES (%s, %s, %s, %s)"
         cursor.executemany(sql,data)
     if table == "exhibition":
-        sql = "insert into EXHIBITION values (?, ?, ?)"
+        sql = "INSERT INTO EXHIBITION (Name, Start_date, End_date) VALUES (%s, %s, %s)"
         cursor.executemany(sql,data)
     connection.commit()
 
