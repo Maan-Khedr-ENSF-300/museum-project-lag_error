@@ -15,7 +15,7 @@ CREATE TABLE ARTIST(
 	primary key(Name)
 );
 
-DROP TABLE IF EXISTS art_objects;
+DROP TABLE IF EXISTS art_object;
 CREATE TABLE art_object(
 	Id_num				int(10) not null,
 	Artist				varchar(25),
