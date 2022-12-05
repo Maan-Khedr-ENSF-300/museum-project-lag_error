@@ -70,6 +70,7 @@ def add_user():
     command="INSERT INTO Users(Username, Passwrd, Access_Level) VALUES (%s,%s,%s)"
     cur_user.execute(command,val)
     print("User added successfully")
+    cur_user.commit()
     return
 
 def edit_user():
@@ -85,10 +86,12 @@ def edit_user():
 
     edit_info=input("Please input the attribute you would like to update (Username/Passwrd/Access_Level):")
     new_info=input("Please input the new information:")
-    command=("Update Users SET %s=%s Where Username=%(Username)s")
+    command=("Update Users SET %(edit_info)s=%(New_info)s Where Username=%(alter_user)s")
     value=(edit_info,new_info,alter_user)
     cur_user.execute(command,value)
     print("User edited successfully")
+    cur_user.commit()
+
     return
 
 def remove_user():
@@ -114,6 +117,8 @@ def remove_user():
 
 
     print("User deleted successfully")
+    cur_user.commit()
+
     return
 
 
@@ -141,6 +146,8 @@ def block_unblock_user():
         print("This user is unblocked")
     
     cur_user.execute(command,value)
+    cur_user.commit()
+    return
 
 def show_user():
     cur_user.execute("Select Username, Passwrd, Access_Level from Users Where Access_Level<>3")
