@@ -211,35 +211,6 @@ def change_user():
         choice=change_user_menu()
     return
 
-def admin_menu():
-    choice=100
-    while choice not in range(0,6):
-        print("Please chose the number 0 to 5\n")
-        print("Press 0: Quit the program \n")
-        print("Press 1: Change user information\n ")
-        print("Press 2: Change database\n")
-        print("Press 3: Change data\n")
-        print("Press 4: View data\n")
-        print("Press 5: Direct input sql command")
-        choice = int(input("please chose the options: \n"))
-    return choice 
-
-def admin():
-    choice=admin_menu()
-    while choice!=0:
-        if choice==1:
-            change_user()
-        if choice==2:
-            modify_database()
-        if choice==3:
-            data_entry(3)
-        if choice==4:
-            end_user(3)
-        if choice==5:
-            input_sql()
-        choice=admin_menu()
-    return
-
 def add_tuples():
     print("Preparing to insert new tuple(s) into a table in the database.")
     connection = mysql.connect(host="localhost", user="root", passwd="password", database="museum")
@@ -360,6 +331,36 @@ def end_user_menu():
 
 def end_user():
     pass
+
+
+def admin_menu():
+    choice=100
+    while choice not in range(0,6):
+        print("Please chose the number 0 to 5\n")
+        print("Press 0: Quit the program \n")
+        print("Press 1: Change user information\n ")
+        print("Press 2: Change database\n")
+        print("Press 3: Change data\n")
+        print("Press 4: View data\n")
+        print("Press 5: Direct input sql command")
+        choice = int(input("please chose the options: \n"))
+    return choice 
+
+def admin():
+    choice=admin_menu()
+    while choice!=0:
+        if choice==1:
+            change_user()
+        if choice==2:
+            modify_database()
+        if choice==3:
+            data_entry(3)
+        if choice==4:
+            end_user(3)
+        if choice==5:
+            input_sql()
+        choice=admin_menu()
+    return
 
 
 def main():
