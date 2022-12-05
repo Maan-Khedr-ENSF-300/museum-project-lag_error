@@ -4,12 +4,21 @@ USE museum;
 
 DROP TABLE IF EXISTS ARTIST;
 CREATE TABLE ARTIST(
+<<<<<<< HEAD
     Name          	varchar(20) not null,
     Date_born       int(10),
     Date_die        int(10),
     Country         varchar(25) not null,
     Epoch           varchar(25) not null,
     Main_Style      varchar(25) not null,
+=======
+    Name            varchar(20) not null,
+    Date_born       int(10),
+    Date_die        int(10),
+    Country         varchar(25) ,
+    Epoch           varchar(25) ,
+    Main_Style      varchar(25) ,
+>>>>>>> Thanh
     Description     varchar(100),  
 
     primary key(Name)
@@ -17,6 +26,7 @@ CREATE TABLE ARTIST(
 INSERT INTO ARTIST (Name, Date_born, Date_die, Country, Epoch, Main_style, Description)
 VALUES
 ('Hans Holbein', 1497, 1543, 'Germany', 'This_era', 'This_style', NULL),
+<<<<<<< HEAD
 ('LEONARDO da Vinci', 1497, 1543, 'Germany', 'This_era', 'This_style', NULL),
 ('Vincent van Gough', 1497, 1543, 'Germany', 'This_era', 'This_style', NULL),
 ('Edvand Much', 1497, 1543, 'Germany', 'This_era', 'This_style', NULL),
@@ -29,11 +39,28 @@ CREATE TABLE art_object(
     Year                int(4),
     Title               varchar(30) not null,
     Description         varchar(100) not null,
+=======
+('LEONARDO da Vinci', NULL, NULL,NULL,NULL,NULL,NULL),
+('Vincent van Gough', NULL, NULL,NULL,NULL,NULL,NULL),
+('Edvand Much', NULL, NULL,NULL,NULL,NULL,NULL),
+('Grayson Perry', NULL, NULL,NULL,NULL,NULL,NULL);
+
+
+
+DROP TABLE IF EXISTS ART_OBJECT;
+CREATE TABLE ART_OBJECT(
+    Id_num              int,
+    Artist              varchar(25),
+    Year                int(10),
+    Title               varchar(30) not null,
+    Description         varchar(1000) not null,
+>>>>>>> Thanh
     Country             varchar(30) not null,
     Epoch               varchar(20) ,
     Style               varchar(20) not null,
     
     primary key (Id_num)  ,
+<<<<<<< HEAD
     foreign key(Artist) references Artist(Name)
 
 );
@@ -45,13 +72,33 @@ VALUES
 ('4', 'Grayson Perry','1994', 'My Gods','depicts four large figures','England',null,'modern');
 
 
+=======
+    foreign key(Artist) references ARTIST(Name)
+
+);
+INSERT INTO ART_OBJECT(Id_num, Artist, Year, Title, Description, Country, Epoch, Style)
+VALUES
+('1', 'LEONARDO da Vinci','1503','Monalisa','considered an archetypal masterpice of Italian Renaissance', 'Italy','Renaissance', 'sfumato'),
+('2' ,'Vincent van Gough','1889', 'Starry night','considered to be his magnum opus', 'Netherlands', 'Post Impressionist', 'Modern Art'),
+('3','Edvand Much','1893','The sream','featuring a ghoulish figure that looks like the host from the Tales from the Crypt', 'Dutch',null, 'Symnbolist movement'),
+('4', 'Grayson Perry','1994', 'My Gods','depicts four large figures','England',null,'modern');
+
+
+
+
+
+>>>>>>> Thanh
 DROP TABLE IF EXISTS PAINTING;
 CREATE TABLE PAINTING(
     Id_num              int(10) not null,
     Paint_type          varchar(25) not null,
     Drawn_on            varchar(25) not null,
     primary key (Id_num),
+<<<<<<< HEAD
     foreign key(Id_num) references art_object(Id_num)
+=======
+    foreign key(Id_num) references ART_OBJECT(Id_num)
+>>>>>>> Thanh
 
 );
 INSERT INTO PAINTING(Id_num, Paint_type, Drawn_on)
@@ -60,6 +107,11 @@ VALUES
 ('2', 'Portrait','canvas'),
 ('3', 'Portrai', 'cardboard');
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> Thanh
 DROP TABLE IF EXISTS SCULP_OR_STA;
 CREATE TABLE SCULP_OR_STA(
     Id_num              int(10) not null,
@@ -67,30 +119,51 @@ CREATE TABLE SCULP_OR_STA(
     Height              int(10) ,
     Weight              int(10) ,
     primary key (Id_num),
+<<<<<<< HEAD
     foreign key(Id_num) references art_object(Id_num)
+=======
+    foreign key(Id_num) references ART_OBJECT(Id_num)
+>>>>>>> Thanh
 
 );
 INSERT INTO SCULP_OR_STA(Id_Num, Materials, Height, Weight)
 VALUES
 ('4', 'Ceramic',null, null);
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> Thanh
 DROP TABLE IF EXISTS OTHER;
 CREATE TABLE OTHER(
     Id_num              int(10) not null,
     Type                varchar(25) not null,
     primary key (Id_num),
+<<<<<<< HEAD
     foreign key(Id_num) references art_object(Id_num)
+=======
+    foreign key(Id_num) references ART_OBJECT(Id_num)
+>>>>>>> Thanh
 
 );
 
 
+<<<<<<< HEAD
 DROP TABLE IF EXISTS PERMANET_COLLECTION;
+=======
+DROP TABLE IF EXISTS PERMANENT_COLLECTION;
+>>>>>>> Thanh
 CREATE TABLE PERMANENT_COLLECTION(
     Id_num              int(10) not null,
     Date                int(10) not null,
     Status              varchar(25) not null,
     primary key(Id_num),
+<<<<<<< HEAD
     foreign key(Id_num) references art_object(Id_num)
+=======
+    foreign key(Id_num) references ART_OBJECT(Id_num)
+>>>>>>> Thanh
 
 );
 INSERT INTO PERMANENT_COLLECTION(Id_num, Date, Status)
@@ -104,7 +177,11 @@ CREATE TABLE BORROWED(
     Date_borrowed       varchar(30) not null,
     Date_return         varchar(30) not null,
     primary key(Id_num),
+<<<<<<< HEAD
     foreign key(Id_num) references art_object(Id_num)
+=======
+    foreign key(Id_num) references ART_OBJECT(Id_num)
+>>>>>>> Thanh
 
 );
 INSERT INTO BORROWED(Id_num, Date_borrowed, Date_return)
@@ -116,22 +193,36 @@ DROP TABLE IF EXISTS COLLECTION;
 CREATE TABLE COLLECTION(
     Name            VARCHAR(30) not null,
     Type            VARCHAR(30) not null,
+<<<<<<< HEAD
     Description     VARCHAR(100) not null, 
+=======
+    Description     VARCHAR(100) , 
+>>>>>>> Thanh
     Current_Pnumber VARCHAR(20) not null,
     primary key(Name)
 );
 INSERT INTO COLLECTION(Name, Type, Description, Current_Pnumber)
 VALUES
+<<<<<<< HEAD
 ('Vinci collection','Drawing','his most famous arts', '202-301-3000'),
 ('Gough collection', 'modern art','Description','647-472-3245'),
 ('Spring collection', 'expressinist','Will have them later','564-462-4322');
+=======
+('Vinci collection','his most famous arts',NULL, '202-301-3000'),
+('Gough collection', 'modern art',NULL,'647-472-3245'),
+('Spring collection', 'expressinist',NULL,'564-462-4322');
+>>>>>>> Thanh
 
 
 DROP TABLE IF EXISTS BELONG_TO_COLLECTION;
 CREATE TABLE BELONG_TO_COLLECTION(
     Id_Num          int(20) not null,
     Collection_name         varchar(30) not null,
+<<<<<<< HEAD
     foreign key(Id_num) references art_object(Id_num),
+=======
+    foreign key(Id_num) references ART_OBJECT(Id_num),
+>>>>>>> Thanh
     foreign key(Collection_name) references COLLECTION(name) 
 );
 INSERT INTO BELONG_TO_COLLECTION(Id_num, Collection_name)
@@ -151,7 +242,11 @@ CREATE TABLE EXHIBITION(
 INSERT INTO EXHIBITION(Name, Start_date, End_date)
 VALUES
 ('Winter exhibition', '01-11-2022','31-12-2022'),
+<<<<<<< HEAD
 ('Exotic exhibition', '01-8-2022','31-4-2023' );
+=======
+('Exotic exhihibition', '01-8-2022','31-4-2023' );
+>>>>>>> Thanh
 
 
 
@@ -159,6 +254,7 @@ DROP TABLE IF EXISTS EXHIBITED_IN;
 CREATE TABLE EXHIBITED_IN(
     Id_num          int(20) not null,
     Name_exhibition varchar(30) not null,
+<<<<<<< HEAD
     foreign key(Id_num) references art_object(Id_num),
     foreign key(Name_exhibition) references Exhibition(Name) 
     
@@ -169,6 +265,12 @@ VALUES
 ('2', 'Winter exhibition'),
 ('3', 'Winter exhibition'),
 ('4', 'Exotic exhibition');
+=======
+    foreign key(Id_num) references ART_OBJECT(Id_num),
+    foreign key(Name_exhibition) references Exhibition(Name) 
+    
+);
+>>>>>>> Thanh
 
 
 
