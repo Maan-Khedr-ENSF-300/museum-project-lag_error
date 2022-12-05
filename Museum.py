@@ -213,8 +213,7 @@ def change_user():
 
 def add_tuples():
     print("Preparing to insert new tuple(s) into a table in the database.")
-    connection = mysql.connect(host="localhost", user="root", passwd="password", database="museum")
-    cursor = connection.cursor()
+    cursor = museum.cursor()
     print("Options:")
     print("artobj, artist, collection, exhibition")
     table = input("Please enter the table for data insertion. Entries are case sensitive:")
@@ -230,14 +229,14 @@ def add_tuples():
     
     if choice == 2:
         if table == "artobj":
-            idnoinput = input("Enter the id_no")
-            artistinput = input("Enter the name of the artist")
-            yearinput = input("Enter the year of the art")
-            titleinput = input("Enter the title")
-            Dscrpinput = input("Enter description of the piece")
-            Cntryinput = input("Enter the country for the piece")
-            Epocinput = input("Enter epoc")
-            Styleinput = input("Enter the style of the art")
+            idnoinput = input("Enter the id_no: ")
+            artistinput = input("Enter the name of the artist: ")
+            yearinput = input("Enter the year of the art: ")
+            titleinput = input("Enter the title: ")
+            Dscrpinput = input("Enter description of the piece: ")
+            Cntryinput = input("Enter the country for the piece: ")
+            Epocinput = input("Enter epoc: ")
+            Styleinput = input("Enter the style of the art: ")
             data = tuple(idnoinput, artistinput, yearinput, titleinput, Dscrpinput, Cntryinput, Epocinput, Styleinput)
         if table == "artist":
             nameinput = input("Enter the artist's name")
@@ -364,5 +363,6 @@ def admin():
 
 
 def main():
-    pass
+    add_tuples()
+
 main()
