@@ -2,6 +2,7 @@ DROP DATABASE IF EXISTS museum;
 CREATE DATABASE museum; 
 USE museum;
 
+
 DROP TABLE IF EXISTS ARTIST
 CREATE TABLE ARTIST(
     Name            int(20) not null,
@@ -168,5 +169,6 @@ VALUES
 ('2', 'Winter exhibition'),
 ('3', 'Winter exhibition'),
 ('4', 'Exotic exhibition')
+
 
 
