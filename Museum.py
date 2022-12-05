@@ -260,6 +260,5 @@ def end_user():
 
 
 def main():
-    admin()
-    #log_in()
+    pass
 main()
