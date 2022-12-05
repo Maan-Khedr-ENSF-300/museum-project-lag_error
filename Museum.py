@@ -211,6 +211,21 @@ def change_user():
         choice=change_user_menu()
     return
 
+def valid_check(search_name, table_name, primary_keytype, primary_key):
+    # execute the select statement
+    # search_name is row to search, table_name self explanator, primary_keytype tells if it is id_num or name since it changes depending on table
+    # primary_key is the value that they entered for the primary key
+    cur_museum.execute("Select * from " +table_name+" where "+primary_keytype+"=%(pkey)s",{'pkey':primary_key})
+    museum_list = cur_museum.fetchone()
+    while museum_list is None:
+        if search_name =="q":
+            return 0
+        print("Invalid key")
+        search_name = input("Please enter primary key of object to update: ")
+        cur_museum.execute("Select * from " +table_name+" where "+primary_keytype+"=%(pkey)s",{'pkey':primary_key})
+
+
+
 def add_tuples():
     print("Preparing to insert new tuple(s) into a table in the database.")
     cursor = museum.cursor()
@@ -283,6 +298,11 @@ def modify_info():
     print("Options:")
     print("artobj, artist, collection, exhibition")
     table = input("Please enter the table for data insertion.")
+    while table != "artobj" or table != "artist" or table != "collection" or table != "exhibition":
+        print("Invalid table")
+        print("Options:")
+        print("artobj, artist, collection, exhibition")
+        table = input("Please enter the table for data insertion.")
 
     # Fnction will update info for art object, artist, exhibition, collection. 
     if table == "artobj":
