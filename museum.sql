@@ -4,7 +4,7 @@ USE museum;
 
 DROP TABLE IF EXISTS ARTIST;
 CREATE TABLE ARTIST(
-    Name            int(20) not null,
+    Name          	varchar(20) not null,
     Date_born       int(10),
     Date_die        int(10),
     Country         varchar(25) not null,
@@ -16,7 +16,11 @@ CREATE TABLE ARTIST(
 );
 INSERT INTO ARTIST (Name, Date_born, Date_die, Country, Epoch, Main_style, Description)
 VALUES
-('Hans Holbein', 1497, 1543, 'Germany', This_era, This_style, NULL);
+('Hans Holbein', 1497, 1543, 'Germany', 'This_era', 'This_style', NULL),
+('LEONARDO da Vinci', 1497, 1543, 'Germany', 'This_era', 'This_style', NULL),
+('Vincent van Gough', 1497, 1543, 'Germany', 'This_era', 'This_style', NULL),
+('Edvand Much', 1497, 1543, 'Germany', 'This_era', 'This_style', NULL),
+('Grayson Perry', 1497, 1543, 'Germany', 'This_era', 'This_style', NULL);
 
 DROP TABLE IF EXISTS art_object;
 CREATE TABLE art_object(
@@ -33,12 +37,12 @@ CREATE TABLE art_object(
     foreign key(Artist) references Artist(Name)
 
 );
-INSERT INTO art_object(Id_num, Artist, Year, Title, Description, Country, Epoch, Styple)
+INSERT INTO art_object(Id_num, Artist, Year, Title, Description, Country, Epoch, Style)
 VALUES
 ('1', 'LEONARDO da Vinci','1503','Monalisa','considered an archetypal masterpice of Italian Renaissance', 'Italy','Renaissance', 'sfumato'),
 ('2' ,'Vincent van Gough','1889', 'Starry night','considered to be his magnum opus', 'Netherlands', 'Post Impressionist', 'Modern Art'),
-('3','Edvand Much','1893','The sream','featuring a ghoulish figure that looks like the host from the Tales from the Crypt', null, 'Symnbolist movement'),
-('4', 'Grayson Perry','1994', 'My Gods','depicts four large figures','England','null','modern');
+('3','Edvand Much','1893','The sream','featuring a ghoulish figure that looks like the host from the Tales from the Crypt','Canada', null, 'Symnbolist movement'),
+('4', 'Grayson Perry','1994', 'My Gods','depicts four large figures','England',null,'modern');
 
 
 DROP TABLE IF EXISTS PAINTING;
@@ -57,7 +61,7 @@ VALUES
 ('3', 'Portrai', 'cardboard');
 
 DROP TABLE IF EXISTS SCULP_OR_STA;
-CREATE TABLE SCULT_OR_STA(
+CREATE TABLE SCULP_OR_STA(
     Id_num              int(10) not null,
     Materials           varchar(25) not null,
     Height              int(10) ,
@@ -81,7 +85,7 @@ CREATE TABLE OTHER(
 
 
 DROP TABLE IF EXISTS PERMANET_COLLECTION;
-CREATE TABLE PERMANET_COLLECTION(
+CREATE TABLE PERMANENT_COLLECTION(
     Id_num              int(10) not null,
     Date                int(10) not null,
     Status              varchar(25) not null,
@@ -89,7 +93,7 @@ CREATE TABLE PERMANET_COLLECTION(
     foreign key(Id_num) references art_object(Id_num)
 
 );
-INSERT INTO PERMANENT_COLLECTION(Id_num, Data, Status)
+INSERT INTO PERMANENT_COLLECTION(Id_num, Date, Status)
 VALUES
 ('1','2022','on display'),
 ('2', '2022', 'on loan');
@@ -103,7 +107,7 @@ CREATE TABLE BORROWED(
     foreign key(Id_num) references art_object(Id_num)
 
 );
-INSERT INTO BORROWED(Id_num, Date_borrowed, Data_return)
+INSERT INTO BORROWED(Id_num, Date_borrowed, Date_return)
 VALUES
 ('3','19-2-2022','19-12-2022'),
 ('4','19-2-2022','25-12-2022');
@@ -118,9 +122,9 @@ CREATE TABLE COLLECTION(
 );
 INSERT INTO COLLECTION(Name, Type, Description, Current_Pnumber)
 VALUES
-('Vinci collection','his most famous arts', '202-301-3000'),
-('Gough collection', 'modern art','647-472-3245'),
-('Spring collection', 'expressinist','564-462-4322');
+('Vinci collection','Drawing','his most famous arts', '202-301-3000'),
+('Gough collection', 'modern art','Description','647-472-3245'),
+('Spring collection', 'expressinist','Will have them later','564-462-4322');
 
 
 DROP TABLE IF EXISTS BELONG_TO_COLLECTION;
@@ -138,16 +142,16 @@ VALUES
 ('4', 'Spring collection');
 
 DROP TABLE IF EXISTS EXHIBITION;
-CREATE TABLE EXHIBITTION(
+CREATE TABLE EXHIBITION(
     Name            varchar(30) not null,
     Start_date      varchar(20) not null,
     End_date        varchar(20) not null,           
     primary key(name)
 );
-INSERT INTO EXHIBITION(Name, Start_date, End_data)
+INSERT INTO EXHIBITION(Name, Start_date, End_date)
 VALUES
 ('Winter exhibition', '01-11-2022','31-12-2022'),
-('Exotic exhihibition', '01-8-2022','31-4-2023' );
+('Exotic exhibition', '01-8-2022','31-4-2023' );
 
 
 
@@ -159,7 +163,7 @@ CREATE TABLE EXHIBITED_IN(
     foreign key(Name_exhibition) references Exhibition(Name) 
     
 );
-INSERT INTO EXHIBITION_IN(Id_num, Name_exhibition)
+INSERT INTO EXHIBITED_IN(Id_num, Name_exhibition)
 VALUES
 ('1','Winter exhibition'),
 ('2', 'Winter exhibition'),
