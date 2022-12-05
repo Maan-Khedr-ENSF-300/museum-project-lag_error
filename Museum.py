@@ -57,8 +57,10 @@ def input_sql():
     command=input("Please input command for SQL:")
     if choice==1:
         cur_museum.execute(command)
+        cur_museum.commit()
     elif choice==2:
         cur_user.execute(command)
+        cur_user.commit()
     else: 
         return
 
