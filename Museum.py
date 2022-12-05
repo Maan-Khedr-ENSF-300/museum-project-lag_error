@@ -211,19 +211,16 @@ def change_user():
         choice=change_user_menu()
     return
 
-def valid_check(search_name, table_name, primary_keytype, primary_key):
+def valid_check(table_name, primary_keytype, primary_key):
     # execute the select statement
     # search_name is row to search, table_name self explanator, primary_keytype tells if it is id_num or name since it changes depending on table
     # primary_key is the value that they entered for the primary key
     cur_museum.execute("Select * from " +table_name+" where "+primary_keytype+"=%(pkey)s",{'pkey':primary_key})
     museum_list = cur_museum.fetchone()
-    while museum_list is None:
-        if search_name =="q":
-            return 0
-        print("Invalid key")
-        search_name = input("Please enter primary key of object to update: ")
-        cur_museum.execute("Select * from " +table_name+" where "+primary_keytype+"=%(pkey)s",{'pkey':primary_key})
-
+    if museum_list is None:
+        return False
+    else:
+        return True
 
 
 def add_tuples():
@@ -298,7 +295,7 @@ def modify_info():
     print("Options:")
     print("artobj, artist, collection, exhibition")
     table = input("Please enter the table for data insertion.")
-    while table != "artobj" or table != "artist" or table != "collection" or table != "exhibition":
+    while table != "artobj" and table != "artist" and table != "collection" and table != "exhibition":
         print("Invalid table")
         print("Options:")
         print("artobj, artist, collection, exhibition")
@@ -306,9 +303,18 @@ def modify_info():
 
     # Fnction will update info for art object, artist, exhibition, collection. 
     if table == "artobj":
-        row = input("Please enter the Id_num of the art object you'd like to update:")
+        ##Aidan, do this to other option
+        check=False
+        while check==False:
+            row = input("Please enter the Id_num of the art object you'd like to update or q for previous page:")
+            if row=='q':
+                return
+            check=valid_check('art_object','Id_num',row)
+        #upto here
+
         print("Options for the attribute to be updated are:")
         print("Artist, Year, Title, Description, Country, Epoch, Style")
+        #Same, do some check and loop here, so do other s
         attriinput = input("Enter the attribute to be updated. Entries are case sensitive:")
         userinput = input("What is the new value to enter:")
 
