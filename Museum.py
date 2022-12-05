@@ -89,15 +89,19 @@ def add_tuples():
     if table == "artobj":
         sql = "INSERT INTO art_object (Id_num, Artist, Year, Title, Description, Country, Epoch, Style) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)" 
         cursor.executemany(sql, data)
+        print("Data added correctly")
     if table == "artist":
         sql = "INSERT INTO ARTIST (Name, Date_born, Date_die, Country, Epoch, Main_Style, Description) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         cursor.executemany(sql,data)
+        print("Data added correctly.")
     if table == "collection":
         sql = "INSERT INTO COLLECTION (Name, Type, Description, Current_PNumber) VALUES (%s, %s, %s, %s)"
         cursor.executemany(sql,data)
+        print("Data added correctly.")
     if table == "exhibition":
         sql = "INSERT INTO EXHIBITION (Name, Start_date, End_date) VALUES (%s, %s, %s)"
         cursor.executemany(sql,data)
+        print("Data added correctly.")
     connection.commit()
 
 def modify_info():
