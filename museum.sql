@@ -2,15 +2,15 @@ DROP DATABASE IF EXISTS museum;
 CREATE DATABASE museum; 
 USE museum;
 
-DROP TABLE IF EXISTS ARTIST
+DROP TABLE IF EXISTS ARTIST;
 CREATE TABLE ARTIST(
 	Name			int(10) not null,
 	Date_born		int(10),
 	Date_die		int(10),
 	Country         varchar(25) not null,
 	Epoch			varchar(25) not null,
-	Main_Style      var_char(25) not null,
-	Description 	var_char(100),	
+	Main_Style      varchar(25) not null,
+	Description 	varchar(100),	
 
 	primary key(Name)
 );
@@ -31,7 +31,7 @@ CREATE TABLE art_object(
 
 );
 
-DROP TABLE IF EXISTS PAINTING
+DROP TABLE IF EXISTS PAINTING;
 CREATE TABLE PAINTING(
 	Id_num				int(10) not null,
 	Paint_type			varchar(25) not null,
@@ -41,7 +41,7 @@ CREATE TABLE PAINTING(
 
 );
 
-DROP TABLE IF EXISTS SCULP_OR_STA
+DROP TABLE IF EXISTS SCULP_OR_STA;
 CREATE TABLE SCULT_OR_STA(
 	Id_num				int(10) not null,
 	Materials			varchar(25) not null,
@@ -52,7 +52,7 @@ CREATE TABLE SCULT_OR_STA(
 
 );
 
-DROP TABLE IF EXISTS OTHER
+DROP TABLE IF EXISTS OTHER;
 CREATE TABLE OTHER(
 	Id_num				int(10) not null,
 	Type				varchar(25) not null,
@@ -61,7 +61,7 @@ CREATE TABLE OTHER(
 
 );
 
-DROP TABLE IF EXISTS PERMANET_COLLECTION
+DROP TABLE IF EXISTS PERMANET_COLLECTION;
 CREATE TABLE PERMANET_COLLECTION(
 	Id_num				int(10) not null,
 	Date				int(10) not null,
@@ -71,7 +71,7 @@ CREATE TABLE PERMANET_COLLECTION(
 
 );
 
-DROP TABLE IF EXISTS BORROWED
+DROP TABLE IF EXISTS BORROWED;
 CREATE TABLE BORROWED(
 	Id_num				int(10) not null,
 	Date_borrowed		int(10) not null,
@@ -82,7 +82,7 @@ CREATE TABLE BORROWED(
 );
 
 
-DROP TABLE IF EXISTS COLLECTION
+DROP TABLE IF EXISTS COLLECTION;
 CREATE TABLE COLLECTION(
 	Name 			VARCHAR(30) not null,
 	Type 			VARCHAR(30) not null,
@@ -99,7 +99,7 @@ CREATE TABLE BELONG_TO_COLLECTION(
 	foreign key(Collection_name) references COLLECTION(name) 
 );
 
-DROP TABLE IF EXISTS EXHIBITION
+DROP TABLE IF EXISTS EXHIBITION;
 CREATE TABLE EXHIBITTION(
 	Name			int(20) not null,
 	Start_date		int(20) not null,
@@ -108,7 +108,7 @@ CREATE TABLE EXHIBITTION(
 );
 
 
-DROP TABLE IF EXISTS EXHIBITED_IN
+DROP TABLE IF EXISTS EXHIBITED_IN;
 CREATE TABLE EXHIBITED_IN(
 	Id_num			int(20) not null,
 	Name_exhibition	varchar(20) not null,
