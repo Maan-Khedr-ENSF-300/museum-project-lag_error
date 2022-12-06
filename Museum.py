@@ -4,14 +4,14 @@ import mysql.connector
 museum=mysql.connector.connect(
     host="localhost",
     user="root",
-    passwd="123321Long@",
+    passwd="password",
     database="museum"
 )
 
 users=mysql.connector.connect(
     host="localhost",
     user="root",
-    passwd="123321Long@",
+    passwd="password",
     database="museumusers"
 )
 cur_museum=museum.cursor()
