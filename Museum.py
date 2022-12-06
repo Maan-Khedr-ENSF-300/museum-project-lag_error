@@ -69,7 +69,7 @@ def artist_search(artist_name):
     while list_of_artist is None :
         if artist_name=='q':
             return
-        print("artist name is in valid")
+        print("artist name is not valid")
         artist_name = input('Please enter a new artist name:')
         cur_museum.execute("select* from ARTIST where Name = %(Name)s",{'Name':artist_name})
         
@@ -212,6 +212,17 @@ def add_tuples():
     
     if choice == 2:
         if table == "artobj":
+            print("Before adding a new object please check if the artist of the object are stored in our data first\n If the artist is not found please enter the artist information first")
+            artist_check = input("Please enter your artist")
+            list_of_artist = []
+            cur_museum.execute("select* from ARTIST where Name = %(Name)s",{'Name':artist_check})
+            list_of_artist= cur_museum.fetchone()
+            while list_of_artist is None:
+                print("The artist is not exist in our data")
+                print("Please press 2 to add data and type artist to add info of the artist before adding this art-piece")
+            print("The artist is in our data-Please enter the infomation about the art-piece")
+                
+
             idnoinput = input("Enter the id_no: ")
             artistinput = input("Enter the name of the artist: ")
             yearinput = input("Enter the year of the art: ")
@@ -351,7 +362,8 @@ def data_entry(user_type):
         elif choice ==3:
             modify_info()
         elif choice ==4:
-            delete_info()
+            pass
+            #delete_info()
         elif choice==5:
             return
         choice = data_entry_menu(user_type)
