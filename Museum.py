@@ -4,14 +4,14 @@ import mysql.connector
 museum=mysql.connector.connect(
     host="localhost",
     user="root",
-    passwd="password",
+    passwd="123321Long@",
     database="museum"
 )
 
 users=mysql.connector.connect(
     host="localhost",
     user="root",
-    passwd="password",
+    passwd="123321Long@",
     database="museumusers"
 )
 cur_museum=museum.cursor()
@@ -347,112 +347,6 @@ def modify_info():
         value(userinput4,row4)
         cursor.execute(sql,value)
         museum.commit()
-
-def data_entry_menu(user_type):
-        print("Welcome to the program")
-        option=100
-        while option not in range(0,6):
-            print("Please chose one of the option below")
-            print("Press 0: Quit program")
-            print("Press 1: Search data")
-            print("Press 2: Add data")
-            print("Press 3: Update data")
-            print("Press 4: Delete data")
-            if user_type=='3':
-                print("Press 5: Previous page")
-            if (option==5 and user_type=='3'):
-                return
-            option=int(input("Please input your option: "))
-        return option
-
-def data_entry(user_type):
-    choice = data_entry_menu(user_type)
-    while (choice !=0):
-        if choice ==1:
-            end_user(user_type)
-        elif choice ==2:
-            add_tuples()
-        elif choice ==3:
-            modify_info()
-        elif choice ==4:
-            pass
-            #delete_info()
-        elif choice==5:
-            return
-        choice = data_entry_menu(user_type)
-    return
-        
-def input_sql():
-    choice=input("Which one are you changing? 1-Museum, 2-User")
-    command=input("Please input command for SQL:")
-    if choice==1:
-        cur_museum.execute(command)
-        museum.commit()
-    elif choice==2:
-        cur_user.execute(command)
-        users.commit()
-    else: 
-        return
-
-def add_user():
-    username=input("Please input new username: ")
-    password=input("Please input new password: ")
-    user_type=input("Please input user type (1-end user, 2-data entry, 3-admin): ")
-    val=(username, password, user_type)
-    command="INSERT INTO Users(Username, Passwrd, Access_Level) VALUES (%s,%s,%s)"
-    cur_user.execute(command,val)
-    print("User added successfully")
-    users.commit()
-    return
-
-def edit_user():
-    alter_user=input("Which user you would like to change? ")
-    cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':alter_user})
-    user_list=cur_user.fetchone()
-    while user_list is None:
-        if alter_user=="q":
-            return 0
-        print("Invalid user")
-        alter_user=input("Please enter username or q for previous page: ")
-        cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':alter_user})
-
-    edit_info=input("Please input the attribute you would like to update (Username/Passwrd/Access_Level):")
-    new_info=input("Please input the new information:")
-    command="Update Users SET "+ edit_info +"=%s Where Username=%s"
-    value=(new_info,alter_user)
-    cur_user.execute(command,value)
-    print("User edited successfully")
-    users.commit()
-
-    return
-
-def remove_user():
-    del_user=input("Which user you would like to change? ")
-    cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':del_user})
-    user_list=cur_user.fetchone()
-    while user_list is None:
-        if del_user=="q":
-            return 0
-        print("Invalid user")
-        del_user=input("Please enter username or q for previous page: ")
-        cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':del_user})
-    
-    cur_user.execute("Select * from Block_List where Username=%(Username)s",{'Username':del_user})
-    user_list=cur_user.fetchone()
-    if user_list is not None:
-        command=("Delete from Block_List Where Username=%(Username)s")
-        cur_user.execute(command,{'Username':del_user})
-
-
-    command=("Delete from Users Where Username=%(Username)s")
-    cur_user.execute(command,{'Username':del_user})
-
-
-    print("User deleted successfully")
-    users.commit()
-
-    return
-
 def remove_info():
     print("Options:")
     print("artobj, artist, collection, exhibition")
@@ -463,7 +357,7 @@ def remove_info():
         print("artobj, artist, collection, exhibition")
         table = input("Please enter the table to remove info from: ")
     if table == "artobj":
-        del_info = input("What is the Id_num of the art object you'd like to delete: ")
+        del_info = int(input("What is the Id_num of the art object you'd like to delete: "))
         cur_museum.execute("Select * from art_object where Id_num =%(Id_num)s",{'Id_num':del_info})
         museum_list = cur_museum.fetchone()
         while museum_list is None:
@@ -619,6 +513,110 @@ def remove_info():
     museum.commit()
 
     
+def data_entry_menu(user_type):
+        print("Welcome to the program")
+        option=100
+        while option not in range(0,6):
+            print("Please chose one of the option below")
+            print("Press 0: Quit program")
+            print("Press 1: Search data")
+            print("Press 2: Add data")
+            print("Press 3: Update data")
+            print("Press 4: Delete data")
+            if user_type=='3':
+                print("Press 5: Previous page")
+            if (option==5 and user_type=='3'):
+                return
+            option=int(input("Please input your option: "))
+        return option
+
+def data_entry(user_type):
+    choice = data_entry_menu(user_type)
+    while (choice !=0):
+        if choice ==1:
+            end_user(user_type)
+        elif choice ==2:
+            add_tuples()
+        elif choice ==3:
+            modify_info()
+        elif choice ==4:
+            remove_info()
+        elif choice==5:
+            return
+        choice = data_entry_menu(user_type)
+    return
+        
+def input_sql():
+    choice=input("Which one are you changing? 1-Museum, 2-User")
+    command=input("Please input command for SQL:")
+    if choice==1:
+        cur_museum.execute(command)
+        museum.commit()
+    elif choice==2:
+        cur_user.execute(command)
+        users.commit()
+    else: 
+        return
+
+def add_user():
+    username=input("Please input new username: ")
+    password=input("Please input new password: ")
+    user_type=input("Please input user type (1-end user, 2-data entry, 3-admin): ")
+    val=(username, password, user_type)
+    command="INSERT INTO Users(Username, Passwrd, Access_Level) VALUES (%s,%s,%s)"
+    cur_user.execute(command,val)
+    print("User added successfully")
+    users.commit()
+    return
+
+def edit_user():
+    alter_user=input("Which user you would like to change? ")
+    cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':alter_user})
+    user_list=cur_user.fetchone()
+    while user_list is None:
+        if alter_user=="q":
+            return 0
+        print("Invalid user")
+        alter_user=input("Please enter username or q for previous page: ")
+        cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':alter_user})
+
+    edit_info=input("Please input the attribute you would like to update (Username/Passwrd/Access_Level):")
+    new_info=input("Please input the new information:")
+    command="Update Users SET "+ edit_info +"=%s Where Username=%s"
+    value=(new_info,alter_user)
+    cur_user.execute(command,value)
+    print("User edited successfully")
+    users.commit()
+
+    return
+
+def remove_user():
+    del_user=input("Which user you would like to change? ")
+    cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':del_user})
+    user_list=cur_user.fetchone()
+    while user_list is None:
+        if del_user=="q":
+            return 0
+        print("Invalid user")
+        del_user=input("Please enter username or q for previous page: ")
+        cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':del_user})
+    
+    cur_user.execute("Select * from Block_List where Username=%(Username)s",{'Username':del_user})
+    user_list=cur_user.fetchone()
+    if user_list is not None:
+        command=("Delete from Block_List Where Username=%(Username)s")
+        cur_user.execute(command,{'Username':del_user})
+
+
+    command=("Delete from Users Where Username=%(Username)s")
+    cur_user.execute(command,{'Username':del_user})
+
+
+    print("User deleted successfully")
+    users.commit()
+
+    return
+
 
 def block_unblock_user():
     change_user=input("Which user you would like to change his/her block state? ")
