@@ -1,7 +1,6 @@
 from getpass import getpass
 import mysql.connector
 
-
 museum=mysql.connector.connect(
     host="localhost",
     user="root",
@@ -19,15 +18,15 @@ cur_museum=museum.cursor()
 cur_user=users.cursor()
 
 
-
 def log_in():
     print("Welcom to Museum")
     print()
 
     username=input("Please enter you username: ")
-    cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':username})
+    if username=="q":
+        return 0
+    cur_user.execute("Select * from users where Username=%(Username)s",{'Username':username})
     user_list=cur_user.fetchone()
-
     while user_list is None:
         if username=="q":
             return 0
@@ -41,7 +40,7 @@ def log_in():
         if pwd=="q":
             return 0
         print("Invalid password")
-        pwd=input("Please enter your password or q for ending this app")
+        pwd=input("Please enter your password or q for ending this app: ")
 
     cur_user.execute("Select Username from Block_List where Username=%(Username)s",{'Username':username})
     blocked=[cur_user.fetchone()]
@@ -68,6 +67,8 @@ def artist_search(artist_name):
     cur_museum.execute("select* from ARTIST where Name = %(Name)s",{'Name':artist_name})
     list_of_artist= cur_museum.fetchone()
     while list_of_artist is None :
+        if artist_name=='q':
+            return
         print("artist name is in valid")
         artist_name = input('Please enter a new artist name:')
         cur_museum.execute("select* from ARTIST where Name = %(Name)s",{'Name':artist_name})
@@ -79,20 +80,20 @@ def artist_search(artist_name):
         if row_artist[i] == "":
             row_artist[i] = "Not valid"
 
-        print("Name of artist: "+str(row_artist[0]))
-        print("Date born: "+str(row_artist[1]))
-        print("Date die: "+str(row_artist[2]))
-        print("Country: "+str(row_artist[3]))
-        print("Epoch: "+str(row_artist[4]))
-        print("Main Style: "+str(row_artist[5]))
-        print("Desciption: "+str(row_artist[6]))
-        
+    print("Name of artist: "+str(row_artist[0]))
+    print("Date born: "+str(row_artist[1]))
+    print("Date die: "+str(row_artist[2]))
+    print("Country: "+str(row_artist[3]))
+    print("Epoch: "+str(row_artist[4]))
+    print("Main Style: "+str(row_artist[5]))
+    print("Desciption: "+str(row_artist[6]))
         
 def art_piece_search(art_piece):
-    list_of_object = []
     cur_museum.execute("select* from ART_OBJECT where Title= %(Title)s",{'Title': art_piece})
     list_of_arobject = cur_museum.fetchone()
     while list_of_arobject is None:
+        if art_piece=="q":  ###previous page
+            return          ###
         print("Your art_object not found")
         art_piece = input("Enter you art-piece name:")
         cur_museum.execute("select* from ART_OBJECT where Title = %(Title)s",{'Title':art_piece})
@@ -187,9 +188,13 @@ def end_user(user_type):
 def add_tuples():
     print("Preparing to insert new tuple(s) into a table in the database.")
     cursor = museum.cursor()
-    print("Options:")
-    print("artobj, artist, collection, exhibition")
-    table = input("Please enter the table for data insertion. Entries are case sensitive:")
+    table='none'
+    while table!="artobj" and table!="artist" and table!="collection" and table!="exhibition":
+        if table=='q':
+            return
+        print("Options:")
+        print("artobj, artist, collection, exhibition")
+        table = input("Please enter the table for data insertion. Entries are case sensitive:")
 
     choice = input("Enter 1 to provide file, enter 2 to use prompts:")
     choice = int(choice)
@@ -326,11 +331,10 @@ def data_entry_menu(user_type):
             print("Press 4: Delete data")
             if user_type=='3':
                 print("Press 5: Previous page")
-            option =input()
-            if (option==5 and user_type!='3'):
-                continue
+            if (option==5 and user_type=='3'):
+                return
+            option=int(input("Please input your option: "))
         return option
-
 
 def data_entry(user_type):
     choice = data_entry_menu(user_type)
@@ -345,9 +349,9 @@ def data_entry(user_type):
             delete_info()
         elif choice==5:
             return
+        choice = data_entry_menu(user_type)
     return
         
-
 def input_sql():
     choice=input("Which one are you changing? 1-Museum, 2-User")
     command=input("Please input command for SQL:")
@@ -418,7 +422,6 @@ def remove_user():
     users.commit()
 
     return
-
 
 def block_unblock_user():
     change_user=input("Which user you would like to change his/her block state? ")
@@ -507,7 +510,6 @@ def change_user():
         choice=change_user_menu()
     return
 
-
 def admin_menu():
     choice=100
     while choice not in range(0,6):
@@ -539,8 +541,17 @@ def admin():
 
 
 def main():
-    modify_info()
+    user=log_in()
+    if user==1:
+        end_user(1)
+    if user==2:
+        data_entry(2)
+    if user==3:
+        admin()
+    print("Thank you for using this database")
 
-main()
 
+#main()
+
+data_entry(2)
 
