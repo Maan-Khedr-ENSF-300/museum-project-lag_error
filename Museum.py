@@ -107,6 +107,8 @@ def colect_search(colect_name):
     cur_museum.execute("select Name from COLLECTION where Name =%(Name)s", {'Name':colect_name})
     list_of_collection =cur_museum.fetchone()
     while list_of_collection is None:
+        if colect_name == "q":
+            return
         print("Your art_object not found")
         colect_name = input("Please enter the collection you looking for: ")
         cur_museum.execute("select Name from COLLECTION where Name =%(Name)s", {'Name':colect_name})
@@ -127,6 +129,8 @@ def search_exhibition(exhibition):
         cur_museum.execute("select Name from EXHIBITION where Name =%(Name)s", {'Name':exhibition_name})
         list_of_exhibition=cur_museum.fetchall()
         while list_of_exhibition is None:
+            if exhibition_name == 'q':
+                return
             print("Your exhibtion is not found")
             exhibtion_name =input("Type your exhibition you want to search: ")
             cur_museum.execute("select Name from EXHIBITION where Name =%(Name)s", {'Name':exhibition_name})
@@ -142,6 +146,7 @@ def search_exhibition(exhibition):
         print("The collections are")
         for i in list_of_exhibition:
             print(i[0])
+    return
 
 def end_user_menu(user_type):
     choice=100
@@ -183,6 +188,7 @@ def end_user(user_type):
         
             search_exhibition(exhibition)
         choice = end_user_menu
+        choice = end_user_menu(user_type)
     return
 
 def add_tuples():
@@ -551,7 +557,7 @@ def main():
     print("Thank you for using this database")
 
 
-#main()
+if __name__=="__main__":
+    main()
 
-data_entry(2)
 
