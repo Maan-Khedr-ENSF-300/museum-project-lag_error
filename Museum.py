@@ -274,14 +274,12 @@ def modify_info():
 
     # Fnction will update info for art object, artist, exhibition, collection. 
     if table == "artobj":
-        ##Aidan, do this to other option
         check=False
         while check==False:
             row = input("Please enter the Id_num of the art object you'd like to update or q for previous page:")
-            if row=='q':
+            if row=="q":
                 return
             check=valid_check('art_object','Id_num',row)
-        #upto here
 
         print("Options for the attribute to be updated are:")
         print("Artist, Year, Title, Description, Country, Epoch, Style")
@@ -294,7 +292,12 @@ def modify_info():
         cursor.execute(sql, value)
         museum.commit()
     if table == "artist":
-        row2 = input("Please enter the Name of the art object you'd like to update:")
+        check = False
+        while check == False:
+            row2 = input("Please enter the Name of the object you'd like to update or q for previous page:")
+            if row2=="q":
+                return
+            check = valid_check('ARTIST', 'Name', row2)
         print("Options for the attribute to be updated are:")
         print("Date_born, Date_die, Country, Epoch, Main_Style, Description")
         attriinput2 = input("Enter the attribute you'd like to update. Entries are case sensitive:")
@@ -304,7 +307,12 @@ def modify_info():
         cursor.execute(sql,value)
         museum.commit()
     if table == "collection":
-        row3 = input("Please enter the Name of the collection you'd like to update:")
+        check = False
+        while check == False:
+            row3 = input("Please enter the Name of the collection you'd like to update or q for previous page:")
+            if row3 == "q":
+                return
+            check = valid_check('COLLECTION', 'Name', row3)
         print("Options for the attribute to be updated are:")
         print("Type, Description, Current_PNumber")
         attriinput3 = input("Enter the attribute you'd like to update. Entries are case sensitive:")
@@ -314,7 +322,12 @@ def modify_info():
         cursor.execute(sql,value)
         museum.commit()
     if table == "exhibition":
-        row4 = input("Please enter the Name of the exhibition you'd like to update:")
+        check = False
+        while check == False:
+            row4 = input("Please enter the Name of the exhibition you'd like to update or q for previous page:")
+            if row4 == "q":
+                return
+            check = valid_check('EXHIBITION', 'Name', row4)
         print("Options for the attribute to be updated are:")
         print("Start_date, End_date")
         attriinput4 = input("Enter the attribute you'd like to update. Entries are case sensitive:")
@@ -427,6 +440,173 @@ def remove_user():
     users.commit()
 
     return
+
+def remove_info():
+    print("Options:")
+    print("artobj, artist, collection, exhibition")
+    table = input("Please enter the table to remove info from: ")
+    while table != "artobj" and table != "artist" and table != "collection" and table != "exhibition":
+        print("Invalid table")
+        print("Options:")
+        print("artobj, artist, collection, exhibition")
+        table = input("Please enter the table to remove info from: ")
+    if table == "artobj":
+        del_info = input("What is the Id_num of the art object you'd like to delete: ")
+        cur_museum.execute("Select * from art_object where Id_num =%(Id_num)s",{'Id_num':del_info})
+        museum_list = cur_museum.fetchone()
+        while museum_list is None:
+            if del_info == "q":
+                return
+            print("Invalid Id_num")
+            del_info = input("Please enter an Id_num or q for previous page: ")
+            cur_museum.execute("Select * from art_object where Id_num =%(Id_num)s",{'Id_num':del_info})
+        
+        cur_museum.execute("Select * from PAINTING Where Id_num =%(Id_num)s",{'Id_num':del_info})
+        museum_list = cur_museum.fetchone()
+        if museum_list is not None:
+            command = ("Delete from PAINTING Where Id_num=%(Id_num)s")
+            cur_museum.execute(command,{'Id_num':del_info})
+        
+        cur_museum.execute("Select * from SCULP_OR_STA Where Id_num = %(Id_num)s",{'Id_num':del_info})
+        museum_list = cur_museum.fetchone()
+        if museum_list is not None:
+            command = ("Delete from SCULP_OR_STA Where Id_num=%(Id_num)s")
+            cur_museum.execute(command,{'Id_num':del_info})
+        
+        cur_museum.execute("Select * from PERMANENT_COLLECTION Where Id_num = %(Id_num)s",{'Id_num':del_info})
+        museum_list = cur_museum.fetchone()
+        if museum_list is not None:
+            command = ("Delete from PERMANENT_COLLECTION Where Id_num=%(Id_num)s")
+            cur_museum.execute(command,{'Id_num':del_info})
+        
+        cur_museum.execute("Select * from BORROWED Where Id_num = %(Id_num)s",{'Id_num':del_info})
+        museum_list = cur_museum.fetchone()
+        if museum_list is not None:
+            command = ("Delete from BORROWED Where Id_num=%(Id_num)s")
+            cur_museum.execute(command,{'Id_num':del_info})
+        
+        cur_museum.execute("Select * from BELONG_TO_COLLECTION Where Id_num = %(Id_num)s",{'Id_num':del_info})
+        museum_list = cur_museum.fetchone()
+        if museum_list is not None:
+            command = ("Delete from BELONG_TO_COLLECTION Where Id_num=%(Id_num)s")
+            cur_museum.execute(command,{'Id_num':del_info})
+        
+        cur_museum.execute("Select * from EXHIBITED_IN Where Id_num = %(Id_num)s",{'Id_num':del_info})
+        museum_list = cur_museum.fetchone()
+        if museum_list is not None:
+            command=("Delete from EXHIBITED_IN Where Id_num=%(Id_num)s")
+            cur_museum.execute(command,{'Id_num':del_info})
+
+        command = ("Delete from art_object Where Id_num=%(Id_num)s")
+        cur_museum.execute(command,{'Id_num':del_info})
+        print("artobj deleted successfully")
+    
+    if table == "artist":
+        del_info = input("What is the Name of the artist you'd like to delete: ")
+        cur_museum.execute("Select * from ARTIST where Name =%(Name)s",{'Name':del_info})
+        museum_list = cur_museum.fetchone()
+        while museum_list is None:
+            if del_info == "q":
+                return
+            print("Invalid Name")
+            del_info = input("Please enter a Name or q for previous page: ")
+            cur_museum.execute("Select * from ARTIST where Name =%(Name)s",{'Name':del_info})
+        
+        cur_museum.execute("Select * from art_object Where Artist=%(Name)s",{'Name':del_info})
+        museum_list = cur_museum.fetchone()
+        if museum_list is not None:
+            cur_museum.execute("Select Id_num from art_object Where Artist=%(Name)s",{'Name':del_info})
+            Id_num = cur_museum.fetchone()
+
+# Accounting for Id_num deletions(s)
+
+            cur_museum.execute("Select * from PAINTING Where Id_num =%(Id_num)s",{'Id_num':Id_num})
+            museum_list = cur_museum.fetchone()
+            if museum_list is not None:
+                command = ("Delete from PAINTING Where Id_num=%(Id_num)s")
+                cur_museum.execute(command,{'Id_num':Id_num})
+        
+            cur_museum.execute("Select * from SCULP_OR_STA Where Id_num = %(Id_num)s",{'Id_num':Id_num})
+            museum_list = cur_museum.fetchone()
+            if museum_list is not None:
+                command = ("Delete from SCULP_OR_STA Where Id_num=%(Id_num)s")
+                cur_museum.execute(command,{'Id_num':Id_num})
+        
+            cur_museum.execute("Select * from PERMANENT_COLLECTION Where Id_num = %(Id_num)s",{'Id_num':Id_num})
+            museum_list = cur_museum.fetchone()
+            if museum_list is not None:
+                command = ("Delete from PERMANENT_COLLECTION Where Id_num=%(Id_num)s")
+                cur_museum.execute(command,{'Id_num':Id_num})
+        
+            cur_museum.execute("Select * from BORROWED Where Id_num = %(Id_num)s",{'Id_num':Id_num})
+            museum_list = cur_museum.fetchone()
+            if museum_list is not None:
+                command = ("Delete from BORROWED Where Id_num=%(Id_num)s")
+                cur_museum.execute(command,{'Id_num':Id_num})
+        
+            cur_museum.execute("Select * from BELONG_TO_COLLECTION Where Id_num = %(Id_num)s",{'Id_num':Id_num})
+            museum_list = cur_museum.fetchone()
+            if museum_list is not None:
+                command = ("Delete from BELONG_TO_COLLECTION Where Id_num=%(Id_num)s")
+                cur_museum.execute(command,{'Id_num':Id_num})
+        
+            cur_museum.execute("Select * from EXHIBITED_IN Where Id_num = %(Id_num)s",{'Id_num':Id_num})
+            museum_list = cur_museum.fetchone()
+            if museum_list is not None:
+                command=("Delete from EXHIBITED_IN Where Id_num=%(Id_num)s")
+                cur_museum.execute(command,{'Id_num':Id_num})
+
+            command = ("Delete from art_object Where Artist=%(Name)s")
+            cur_museum.execute(command,{'Name':del_info})
+
+        command = ("Delete from ARTIST Where Name=%(Name)s")
+        cur_museum.execute(command,{'Name':del_info})
+        print("Artist deleted successfully")
+    
+    if table == "collection":
+        del_info = input("What is the name of the collection you'd like to delete: ")
+        cur_museum.execute("Select * from COLLECTION where Name=%(Name)s",{'Name':del_info})
+        museum_list = cur_museum.fetchone()
+        while museum_list is None:
+            if del_info == "q":
+                return
+            print("Invalid name")
+            del_info = input("Please enter a name or q for previous page: ")
+            cur_museum.execute("Select * from COLLECTION where Name=%(Name)s",{'Name':del_info})
+        
+        cur_museum.execute("Select * from BELONG_TO_COLLECTION where Collection_name=%(Name)s",{'Name':del_info})
+        museum_list = cur_museum.fetchone()
+        if museum_list is not None:
+            command = ("Delete from BELONG_TO_COLLECTION Where Collection_name=%(Name)s")
+            cur_museum.execute(command,{'Name':del_info})
+        
+        command = ("Delete from COLLECTION where Name=%(Name)s")
+        cur_museum.execute(command,{'Name':del_info})
+        print("Collection deleted successfully")
+
+    if table == "exhibition":
+        del_info = input("What is the name of the exhibition you'd like to delete: ")
+        cur_museum.execute("Select * from EXHIBITION where Name=%(Name)s",{'Name':del_info})
+        museum_list = cur_museum.fetchone()
+        while museum_list is None:
+            if del_info == "q":
+                return
+            print("Invalid name")
+            del_info = input("Please enter a name or q for previous page: ")
+            cur_museum.execute("Select * from EXHIBITION where Name=%(Name)s",{'Name':del_info})
+        
+        cur_museum.execute("Select * from EXHIBITED_IN where Name_exhibition=%(Name)s",{'Name':del_info})
+        museum_list = cur_museum.fetchone()
+        if museum_list is not None:
+            command = ("Delete from EXHIBITED_IN where Name_exhibition=%(Name)s")
+            cur_museum.execute(command,{'Name':del_info})
+        
+        command = ("Delete from EXHIBITION where Name=%(Name)s")
+        cur_museum.execute(command,{'Name':del_info})
+        print("Exhibition deleted successfully")
+    museum.commit()
+
+    
 
 def block_unblock_user():
     change_user=input("Which user you would like to change his/her block state? ")
