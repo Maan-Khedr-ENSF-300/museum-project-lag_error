@@ -1,4 +1,19 @@
+import mysql.connector
+museum=mysql.connector.connect(
+    host="localhost",
+    user="root",
+    passwd="123321Long@",
+    database="museum"
+)
 
+users=mysql.connector.connect(
+    host="localhost",
+    user="root",
+    passwd="123321Long@",
+    database="museumusers"
+)
+cur_museum=museum.cursor()
+cur_user=users.cursor()
 
 def data_entry_menu(user_type):
         print("Welcome to the program")
@@ -24,11 +39,11 @@ def data_entry(user_type):
         if choice ==1:
             end_user_menu(user_type)
         elif choice ==2:
-            add_tuples
+            add_tuples()
         elif choice ==3:
-            modify_info
+            modify_info()
         elif choice ==4:
-            delete_info
+            delete_info()
         elif choice==5:
             return
     return
@@ -107,7 +122,6 @@ def artist_search(artist_name):
 
         
 def art_piece_search(art_piece):
-    list_of_object = []
     cur_museum.execute("select* from ART_OBJECT where Title= %(Title)s",{'Title': art_piece})
     list_of_arobject = cur_museum.fetchone()
     while list_of_arobject is None:
@@ -118,6 +132,9 @@ def art_piece_search(art_piece):
     row_art_piece = cur_museum.fetchone()
     print("Name of the object: "+ str(row_art_piece[3]))
     print("Name of the artist: "+ str(row_art_piece[1]))
+
+
+
 def colect_search(colect_name):
     list_of_collection =[]
     cur_museum.execute("select Name from COLLECTION where Name =%(Name)s", {'Name':colect_name})
@@ -135,6 +152,9 @@ def colect_search(colect_name):
     print("Type: "+str(row_collection[1]))
     print("Description: " + str(row_collection[2]))
     print("Current phone number: " + str(row_collection[3]))
+
+
+
 def search_exhibition(exhibition):
     if exhibition == '1':
         exhibition_name =input("Type your exhibition you want to search: ")
@@ -157,6 +177,31 @@ def search_exhibition(exhibition):
         print("The collections are")
         for i in list_of_exhibition:
             print(i[0])
+
+
+'''def delete_info():
+    list_of_table_name = []
+    cur_museum.execute("SHOW TABLES")
+    for table_name in cur_museum:
+        list_of_table_name.append(table_name[0])
+    for i in list_of_table_name:
+        print(i)
+    data_user_option= input("please enter the name table you want to delete: ")
+    if data_user_option.upper() in list_of_table_name:
+        cur_museum.execute(f"Select * from {data_user_option.upper()}")
+        list_of_element = cur_museum.fetchall()
+        colum_names = cur_museum.column_names
+        attribute_size = len(colum_names)
+        for i in range(len())
+        for table_element in cur_museum:
+            list_of_element.append(table_element)
+        first_element=input("Enter the "+ str(list_of_element[0])+ " to delete from table"+ str(data_user_option) )
+        for i in range(0,len(table_element)):
+            cur_museum.execute("Delete* from data_user_option.upper() where table_element[0] = %(table_element)s", {'table_element[0]': first_element})'''
+
+
+
+
 
 
 
