@@ -1,38 +1,146 @@
+from getpass import getpass
+import mysql.connector
 
 
-def data_entry_menu(user_type):
-        print("Welcome to the program")
-        option=100
-        while option not in range(0,6):
-            print("Please chose one of the option below")
-            print("Press 0: Quit program")
-            print("Press 1: Search data")
-            print("Press 2: Add data")
-            print("Press 3: Update data")
-            print("Press 4: Delete data")
-            if user_type=='3':
-                print("Press 5: Previous page")
-            option =input()
-            if (option==5 and user_type!='3'):
-                continue
-        return option
+museum=mysql.connector.connect(
+    host="localhost",
+    user="root",
+    passwd="password",
+    database="museum"
+)
+
+users=mysql.connector.connect(
+    host="localhost",
+    user="root",
+    passwd="password",
+    database="museumusers"
+)
+cur_museum=museum.cursor()
+cur_user=users.cursor()
 
 
-def data_entry(user_type):
-    choice = data_entry_menu(user_type)
-    while (choice !=0):
-        if choice ==1:
-            end_user_menu(user_type)
-        elif choice ==2:
-            add_tuples()
-        elif choice ==3:
-            modify_info()
-        elif choice ==4:
-            delete_info()
-        elif choice==5:
-            return
-    return
+
+def log_in():
+    print("Welcom to Museum")
+    print()
+
+    username=input("Please enter you username: ")
+    cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':username})
+    user_list=cur_user.fetchone()
+
+    while user_list is None:
+        if username=="q":
+            return 0
+        print("Invalid user")
+        username=input("Please enter username or q for ending this app: ")
+        cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':username})
+
         
+    pwd=input("Please enter your password: ")
+    while pwd!=user_list[1]:
+        if pwd=="q":
+            return 0
+        print("Invalid password")
+        pwd=input("Please enter your password or q for ending this app")
+
+    cur_user.execute("Select Username from Block_List where Username=%(Username)s",{'Username':username})
+    blocked=[cur_user.fetchone()]
+
+    if blocked[0]:
+        print("Sorry, user is blocked.")
+        return
+    return user_list[2]
+
+def valid_check(table_name, primary_keytype, primary_key):
+    # execute the select statement
+    # search_name is row to search, table_name self explanator, primary_keytype tells if it is id_num or name since it changes depending on table
+    # primary_key is the value that they entered for the primary key
+    cur_museum.execute("Select * from " +table_name+" where "+primary_keytype+"=%(pkey)s",{'pkey':primary_key})
+    museum_list = cur_museum.fetchone()
+    if museum_list is None:
+        return False
+    else:
+        return True
+
+def artist_search(artist_name):
+    list_of_artist = []
+
+    cur_museum.execute("select* from ARTIST where Name = %(Name)s",{'Name':artist_name})
+    list_of_artist= cur_museum.fetchone()
+    while list_of_artist is None :
+        print("artist name is in valid")
+        artist_name = input('Please enter a new artist name:')
+        cur_museum.execute("select* from ARTIST where Name = %(Name)s",{'Name':artist_name})
+        
+    
+    cur_museum.execute("SELECT Name, Date_born, Date_die, Country, Epoch, Main_Style, Description from ARTIST where Name = %(Name)s",{'Name':artist_name})
+    row_artist = cur_museum.fetchone()
+    for i in range (0,7):
+        if row_artist[i] == "":
+            row_artist[i] = "Not valid"
+
+        print("Name of artist: "+str(row_artist[0]))
+        print("Date born: "+str(row_artist[1]))
+        print("Date die: "+str(row_artist[2]))
+        print("Country: "+str(row_artist[3]))
+        print("Epoch: "+str(row_artist[4]))
+        print("Main Style: "+str(row_artist[5]))
+        print("Desciption: "+str(row_artist[6]))
+        
+        
+def art_piece_search(art_piece):
+    list_of_object = []
+    cur_museum.execute("select* from ART_OBJECT where Title= %(Title)s",{'Title': art_piece})
+    list_of_arobject = cur_museum.fetchone()
+    while list_of_arobject is None:
+        print("Your art_object not found")
+        art_piece = input("Enter you art-piece name:")
+        cur_museum.execute("select* from ART_OBJECT where Title = %(Title)s",{'Title':art_piece})
+    cur_museum.execute("Select Id_num, Artist, Year, Title, Description, Country, Epoch, Style from ART_OBJECT where Title= %(Title)s",{'Title': art_piece})
+    row_art_piece = cur_museum.fetchone()
+    print("Name of the object: "+ str(row_art_piece[3]))
+    print("Name of the artist: "+ str(row_art_piece[1]))
+
+def colect_search(colect_name):
+    list_of_collection =[]
+    cur_museum.execute("select Name from COLLECTION where Name =%(Name)s", {'Name':colect_name})
+    list_of_collection =cur_museum.fetchone()
+    while list_of_collection is None:
+        print("Your art_object not found")
+        colect_name = input("Please enter the collection you looking for: ")
+        cur_museum.execute("select Name from COLLECTION where Name =%(Name)s", {'Name':colect_name})
+    cur_museum.execute("Select Name, Type, Description, Current_Pnumber from COLLECTION where Name =%(Name)s", {'Name':colect_name})
+    row_collection =cur_museum.fetchone()
+    for i in range(0,4):
+        if row_collection[i]== "":
+            row_collection[i] = "Not mentioned"
+    print("Collection name: "+str(row_collection[0]))
+    print("Type: "+str(row_collection[1]))
+    print("Description: " + str(row_collection[2]))
+    print("Current phone number: " + str(row_collection[3]))
+
+def search_exhibition(exhibition):
+    if exhibition == '1':
+        exhibition_name =input("Type your exhibition you want to search: ")
+        list_of_exhibition=[]
+        cur_museum.execute("select Name from EXHIBITION where Name =%(Name)s", {'Name':exhibition_name})
+        list_of_exhibition=cur_museum.fetchall()
+        while list_of_exhibition is None:
+            print("Your exhibtion is not found")
+            exhibtion_name =input("Type your exhibition you want to search: ")
+            cur_museum.execute("select Name from EXHIBITION where Name =%(Name)s", {'Name':exhibition_name})
+        cur_museum.execute("Select Name, Start_date, End_date, End_date from EXHIBITION where Name =%(Name)s", {'Name':exhibition_name})
+        row_exhibition= cur_museum.fetchone()
+        print("Exhibition name: " +str(row_exhibition[0]) + " is found")
+        print("Exhibition start date: " +str(row_exhibition[1]))
+        print("Exhibition end date: " +str(row_exhibition[2]))
+    elif exhibition =="2":
+        list_of_exhibition=[]
+        cur_museum.execute("select Name from EXHIBITION")
+        list_of_exhibition=cur_museum.fetchall()
+        print("The collections are")
+        for i in list_of_exhibition:
+            print(i[0])
 
 def end_user_menu(user_type):
     choice=100
@@ -76,136 +184,169 @@ def end_user(user_type):
         choice = end_user_menu
     return
 
+def add_tuples():
+    print("Preparing to insert new tuple(s) into a table in the database.")
+    cursor = museum.cursor()
+    print("Options:")
+    print("artobj, artist, collection, exhibition")
+    table = input("Please enter the table for data insertion. Entries are case sensitive:")
 
-def artist_search(artist_name):
-    list_of_artist = []
+    choice = input("Enter 1 to provide file, enter 2 to use prompts:")
+    choice = int(choice)
 
-    cur_museum.execute("select* from ARTIST where Name = %(Name)s",{'Name':artist_name})
-    list_of_artist= cur_museum.fetchone()
-    while list_of_artist is None :
-        print("artist name is in valid")
-        artist_name = input('Please enter a new artist name:')
-        cur_museum.execute("select* from ARTIST where Name = %(Name)s",{'Name':artist_name})
-        
+    if choice == 1:
+        filename = input("Enter file name")
+        with open(filename) as f:
+            lines = f.readlines()
+            data = (tuple(line.split()) for line in lines)
     
-    cur_museum.execute("SELECT Name, Date_born, Date_die, Country, Epoch, Main_Style, Description from ARTIST where Name = %(Name)s",{'Name':artist_name})
-    row_artist = cur_museum.fetchone()
-    for i in range (0,7):
-        if row_artist[i] == "":
-            row_artist[i] = "Not valid"
+    if choice == 2:
+        if table == "artobj":
+            idnoinput = input("Enter the id_no: ")
+            artistinput = input("Enter the name of the artist: ")
+            yearinput = input("Enter the year of the art: ")
+            titleinput = input("Enter the title: ")
+            Dscrpinput = input("Enter description of the piece: ")
+            Cntryinput = input("Enter the country for the piece: ")
+            Epocinput = input("Enter epoc: ")
+            Styleinput = input("Enter the style of the art: ")
+            data = (idnoinput, artistinput, yearinput, titleinput, Dscrpinput, Cntryinput, Epocinput, Styleinput)
+        if table == "artist":
+            nameinput = input("Enter the artist's name")
+            dborninput = input("Enter the year they were born")
+            ddieinput = input("Enter the year the artist died")
+            contryinput = input("Enter the country they are from")
+            epoch2input = input("Enter their era")
+            mstyleinput = input("Enter their main style")
+            descinput = input("Enter a description of them")
+            data = (nameinput, dborninput, ddieinput, contryinput, epoch2input, mstyleinput, descinput)
+        if table == "collection":
+            colnameinput = input("Enter the name of the collection")
+            typeinput = input("Enter the type of the collection")
+            dcrinput = input("Enter description of the collection")
+            pnuminput = input("Enter current pnumber")
+            data = (colnameinput, typeinput, dcrinput, pnuminput)
+        if table == "exhibition":
+            exnameinput = input("Enter the name of the exhibition")
+            sdateinput = input("Enter the startdate of the exhibition")
+            edateinput = input("Enter the end date of the exhibition")
+            data = (exnameinput, sdateinput, edateinput)
 
+    if table == "artobj":
+        sql = "INSERT INTO art_object(Id_num, Artist, Year, Title, Description, Country, Epoch, Style) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)" 
+        cursor.execute(sql, data)
+        print("Data added correctly")
+    if table == "artist":
+        sql = "INSERT INTO ARTIST (Name, Date_born, Date_die, Country, Epoch, Main_Style, Description) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        cursor.executemany(sql,data)
+        print("Data added correctly.")
+    if table == "collection":
+        sql = "INSERT INTO COLLECTION (Name, Type, Description, Current_PNumber) VALUES (%s, %s, %s, %s)"
+        cursor.executemany(sql,data)
+        print("Data added correctly.")
+    if table == "exhibition":
+        sql = "INSERT INTO EXHIBITION (Name, Start_date, End_date) VALUES (%s, %s, %s)"
+        cursor.executemany(sql,data)
+        print("Data added correctly.")
+    museum.commit()
+
+def modify_info():
+    print("preparing to update data")
+    cursor = museum.cursor()
+    print("Options:")
+    print("artobj, artist, collection, exhibition")
+    table = input("Please enter the table for data insertion.")
+    while table != "artobj" and table != "artist" and table != "collection" and table != "exhibition":
+        print("Invalid table")
+        print("Options:")
+        print("artobj, artist, collection, exhibition")
+        table = input("Please enter the table for data insertion.")
+
+    # Fnction will update info for art object, artist, exhibition, collection. 
+    if table == "artobj":
+        ##Aidan, do this to other option
+        check=False
+        while check==False:
+            row = input("Please enter the Id_num of the art object you'd like to update or q for previous page:")
+            if row=='q':
+                return
+            check=valid_check('art_object','Id_num',row)
+        #upto here
+
+        print("Options for the attribute to be updated are:")
+        print("Artist, Year, Title, Description, Country, Epoch, Style")
+        #Same, do some check and loop here, so do other s
+        attriinput = input("Enter the attribute to be updated. Entries are case sensitive:")
+        userinput = input("What is the new value to enter:")
+
+        sql="UPDATE art_object SET " + attriinput +" =%s WHERE Id_num = %s"
+        value=(userinput,row)
+        cursor.execute(sql, value)
+        museum.commit()
+    if table == "artist":
+        row2 = input("Please enter the Name of the art object you'd like to update:")
+        print("Options for the attribute to be updated are:")
+        print("Date_born, Date_die, Country, Epoch, Main_Style, Description")
+        attriinput2 = input("Enter the attribute you'd like to update. Entries are case sensitive:")
+        userinput2 = input("What is the new value to enter:")
+        sql = "UPDATE ARTIST SET " + attriinput2 +" =%s WHERE Name = %s"
+        value =(userinput2,row2)
+        cursor.execute(sql,value)
+        museum.commit()
+    if table == "collection":
+        row3 = input("Please enter the Name of the collection you'd like to update:")
+        print("Options for the attribute to be updated are:")
+        print("Type, Description, Current_PNumber")
+        attriinput3 = input("Enter the attribute you'd like to update. Entries are case sensitive:")
+        userinput3 = input("What is the new value to enter:")
+        sql="UPDATE COLLECTION SET " + attriinput3 +" =%s WHERE Name = %s"
+        value(userinput3,row3)
+        cursor.execute(sql,value)
+        museum.commit()
+    if table == "exhibition":
+        row4 = input("Please enter the Name of the exhibition you'd like to update:")
+        print("Options for the attribute to be updated are:")
+        print("Start_date, End_date")
+        attriinput4 = input("Enter the attribute you'd like to update. Entries are case sensitive:")
+        userinput4 = input("What is the new value to enter:")
+        sql="UPDATE EXHIBITION SET " + attriinput4 +" =%s WHERE Name = %s"
+        value(userinput4,row4)
+        cursor.execute(sql,value)
+        museum.commit()
+
+def data_entry_menu(user_type):
+        print("Welcome to the program")
+        option=100
+        while option not in range(0,6):
+            print("Please chose one of the option below")
+            print("Press 0: Quit program")
+            print("Press 1: Search data")
+            print("Press 2: Add data")
+            print("Press 3: Update data")
+            print("Press 4: Delete data")
+            if user_type=='3':
+                print("Press 5: Previous page")
+            option =input()
+            if (option==5 and user_type!='3'):
+                continue
+        return option
+
+
+def data_entry(user_type):
+    choice = data_entry_menu(user_type)
+    while (choice !=0):
+        if choice ==1:
+            end_user(user_type)
+        elif choice ==2:
+            add_tuples()
+        elif choice ==3:
+            modify_info()
+        elif choice ==4:
+            delete_info()
+        elif choice==5:
+            return
+    return
         
-        print("Name of artist: "+str(row_artist[0]))
-        print("Date born: "+str(row_artist[1]))
-        print("Date die: "+str(row_artist[2]))
-        print("Country: "+str(row_artist[3]))
-        print("Epoch: "+str(row_artist[4]))
-        print("Main Style: "+str(row_artist[5]))
-        print("Desciption: "+str(row_artist[6]))
-        
-
-
-        
-def art_piece_search(art_piece):
-    list_of_object = []
-    cur_museum.execute("select* from ART_OBJECT where Title= %(Title)s",{'Title': art_piece})
-    list_of_arobject = cur_museum.fetchone()
-    while list_of_arobject is None:
-        print("Your art_object not found")
-        art_piece = input("Enter you art-piece name:")
-        cur_museum.execute("select* from ART_OBJECT where Title = %(Title)s",{'Title':art_piece})
-    cur_museum.execute("Select Id_num, Artist, Year, Title, Description, Country, Epoch, Style from ART_OBJECT where Title= %(Title)s",{'Title': art_piece})
-    row_art_piece = cur_museum.fetchone()
-    print("Name of the object: "+ str(row_art_piece[3]))
-    print("Name of the artist: "+ str(row_art_piece[1]))
-def colect_search(colect_name):
-    list_of_collection =[]
-    cur_museum.execute("select Name from COLLECTION where Name =%(Name)s", {'Name':colect_name})
-    list_of_collection =cur_museum.fetchone()
-    while list_of_collection is None:
-        print("Your art_object not found")
-        colect_name = input("Please enter the collection you looking for: ")
-        cur_museum.execute("select Name from COLLECTION where Name =%(Name)s", {'Name':colect_name})
-    cur_museum.execute("Select Name, Type, Description, Current_Pnumber from COLLECTION where Name =%(Name)s", {'Name':colect_name})
-    row_collection =cur_museum.fetchone()
-    for i in range(0,4):
-        if row_collection[i]== "":
-            row_collection[i] = "Not mentioned"
-    print("Collection name: "+str(row_collection[0]))
-    print("Type: "+str(row_collection[1]))
-    print("Description: " + str(row_collection[2]))
-    print("Current phone number: " + str(row_collection[3]))
-def search_exhibition(exhibition):
-    if exhibition == '1':
-        exhibition_name =input("Type your exhibition you want to search: ")
-        list_of_exhibition=[]
-        cur_museum.execute("select Name from EXHIBITION where Name =%(Name)s", {'Name':exhibition_name})
-        list_of_exhibition=cur_museum.fetchall()
-        while list_of_exhibition is None:
-            print("Your exhibtion is not found")
-            exhibtion_name =input("Type your exhibition you want to search: ")
-            cur_museum.execute("select Name from EXHIBITION where Name =%(Name)s", {'Name':exhibition_name})
-        cur_museum.execute("Select Name, Start_date, End_date, End_date from EXHIBITION where Name =%(Name)s", {'Name':exhibition_name})
-        row_exhibition= cur_museum.fetchone()
-        print("Exhibition name: " +str(row_exhibition[0]) + " is found")
-        print("Exhibition start date: " +str(row_exhibition[1]))
-        print("Exhibition end date: " +str(row_exhibition[2]))
-    elif exhibition =="2":
-        list_of_exhibition=[]
-        cur_museum.execute("select Name from EXHIBITION")
-        list_of_exhibition=cur_museum.fetchall()
-        print("The collections are")
-        for i in list_of_exhibition:
-            print(i[0])
-
-museum=mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="password",
-    database="museum"
-)
-
-users=mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="password",
-    database="museumusers"
-)
-cur_museum=museum.cursor()
-cur_user=users.cursor()
-
-
-def log_in():
-    print("Welcom to Museum")
-    print()
-
-    username=input("Please enter you username: ")
-    cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':username})
-    user_list=cur_user.fetchone()
-
-    while user_list is None:
-        if username=="q":
-            return 0
-        print("Invalid user")
-        username=input("Please enter username or q for ending this app: ")
-        cur_user.execute("Select * from Users where Username=%(Username)s",{'Username':username})
-
-        
-    pwd=input("Please enter your password: ")
-    while pwd!=user_list[1]:
-        if pwd=="q":
-            return 0
-        print("Invalid password")
-        pwd=input("Please enter your password or q for ending this app")
-
-    cur_user.execute("Select Username from Block_List where Username=%(Username)s",{'Username':username})
-    blocked=[cur_user.fetchone()]
-
-    if blocked[0]:
-        print("Sorry, user is blocked.")
-        return
-    return user_list[2]
-
 
 def input_sql():
     choice=input("Which one are you changing? 1-Museum, 2-User")
@@ -366,156 +507,6 @@ def change_user():
         choice=change_user_menu()
     return
 
-def valid_check(table_name, primary_keytype, primary_key):
-    # execute the select statement
-    # search_name is row to search, table_name self explanator, primary_keytype tells if it is id_num or name since it changes depending on table
-    # primary_key is the value that they entered for the primary key
-    cur_museum.execute("Select * from " +table_name+" where "+primary_keytype+"=%(pkey)s",{'pkey':primary_key})
-    museum_list = cur_museum.fetchone()
-    if museum_list is None:
-        return False
-    else:
-        return True
-
-
-def add_tuples():
-    print("Preparing to insert new tuple(s) into a table in the database.")
-    cursor = museum.cursor()
-    print("Options:")
-    print("artobj, artist, collection, exhibition")
-    table = input("Please enter the table for data insertion. Entries are case sensitive:")
-
-    choice = input("Enter 1 to provide file, enter 2 to use prompts:")
-    choice = int(choice)
-
-    if choice == 1:
-        filename = input("Enter file name")
-        with open(filename) as f:
-            lines = f.readlines()
-            data = (tuple(line.split()) for line in lines)
-    
-    if choice == 2:
-        if table == "artobj":
-            idnoinput = input("Enter the id_no: ")
-            artistinput = input("Enter the name of the artist: ")
-            yearinput = input("Enter the year of the art: ")
-            titleinput = input("Enter the title: ")
-            Dscrpinput = input("Enter description of the piece: ")
-            Cntryinput = input("Enter the country for the piece: ")
-            Epocinput = input("Enter epoc: ")
-            Styleinput = input("Enter the style of the art: ")
-            data = (idnoinput, artistinput, yearinput, titleinput, Dscrpinput, Cntryinput, Epocinput, Styleinput)
-        if table == "artist":
-            nameinput = input("Enter the artist's name")
-            dborninput = input("Enter the year they were born")
-            ddieinput = input("Enter the year the artist died")
-            contryinput = input("Enter the country they are from")
-            epoch2input = input("Enter their era")
-            mstyleinput = input("Enter their main style")
-            descinput = input("Enter a description of them")
-            data = (nameinput, dborninput, ddieinput, contryinput, epoch2input, mstyleinput, descinput)
-        if table == "collection":
-            colnameinput = input("Enter the name of the collection")
-            typeinput = input("Enter the type of the collection")
-            dcrinput = input("Enter description of the collection")
-            pnuminput = input("Enter current pnumber")
-            data = (colnameinput, typeinput, dcrinput, pnuminput)
-        if table == "exhibition":
-            exnameinput = input("Enter the name of the exhibition")
-            sdateinput = input("Enter the startdate of the exhibition")
-            edateinput = input("Enter the end date of the exhibition")
-            data = (exnameinput, sdateinput, edateinput)
-
-    if table == "artobj":
-        sql = "INSERT INTO art_object(Id_num, Artist, Year, Title, Description, Country, Epoch, Style) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)" 
-        cursor.execute(sql, data)
-        print("Data added correctly")
-    if table == "artist":
-        sql = "INSERT INTO ARTIST (Name, Date_born, Date_die, Country, Epoch, Main_Style, Description) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        cursor.executemany(sql,data)
-        print("Data added correctly.")
-    if table == "collection":
-        sql = "INSERT INTO COLLECTION (Name, Type, Description, Current_PNumber) VALUES (%s, %s, %s, %s)"
-        cursor.executemany(sql,data)
-        print("Data added correctly.")
-    if table == "exhibition":
-        sql = "INSERT INTO EXHIBITION (Name, Start_date, End_date) VALUES (%s, %s, %s)"
-        cursor.executemany(sql,data)
-        print("Data added correctly.")
-    museum.commit()
-
-def modify_info():
-    print("preparing to update data")
-    cursor = museum.cursor()
-    print("Options:")
-    print("artobj, artist, collection, exhibition")
-    table = input("Please enter the table for data insertion.")
-    while table != "artobj" and table != "artist" and table != "collection" and table != "exhibition":
-        print("Invalid table")
-        print("Options:")
-        print("artobj, artist, collection, exhibition")
-        table = input("Please enter the table for data insertion.")
-
-    # Fnction will update info for art object, artist, exhibition, collection. 
-    if table == "artobj":
-        ##Aidan, do this to other option
-        check=False
-        while check==False:
-            row = input("Please enter the Id_num of the art object you'd like to update or q for previous page:")
-            if row=='q':
-                return
-            check=valid_check('art_object','Id_num',row)
-        #upto here
-
-        print("Options for the attribute to be updated are:")
-        print("Artist, Year, Title, Description, Country, Epoch, Style")
-        #Same, do some check and loop here, so do other s
-        attriinput = input("Enter the attribute to be updated. Entries are case sensitive:")
-        userinput = input("What is the new value to enter:")
-
-        sql="UPDATE art_object SET " + attriinput +" =%s WHERE Id_num = %s"
-        value=(userinput,row)
-        cursor.execute(sql, value)
-        museum.commit()
-    if table == "artist":
-        row2 = input("Please enter the Name of the art object you'd like to update:")
-        print("Options for the attribute to be updated are:")
-        print("Date_born, Date_die, Country, Epoch, Main_Style, Description")
-        attriinput2 = input("Enter the attribute you'd like to update. Entries are case sensitive:")
-        userinput2 = input("What is the new value to enter:")
-        sql = "UPDATE ARTIST SET " + attriinput2 +" =%s WHERE Name = %s"
-        value =(userinput2,row2)
-        cursor.execute(sql,value)
-        museum.commit()
-    if table == "collection":
-        row3 = input("Please enter the Name of the collection you'd like to update:")
-        print("Options for the attribute to be updated are:")
-        print("Type, Description, Current_PNumber")
-        attriinput3 = input("Enter the attribute you'd like to update. Entries are case sensitive:")
-        userinput3 = input("What is the new value to enter:")
-        sql="UPDATE COLLECTION SET " + attriinput3 +" =%s WHERE Name = %s"
-        value(userinput3,row3)
-        cursor.execute(sql,value)
-        museum.commit()
-    if table == "exhibition":
-        row4 = input("Please enter the Name of the exhibition you'd like to update:")
-        print("Options for the attribute to be updated are:")
-        print("Start_date, End_date")
-        attriinput4 = input("Enter the attribute you'd like to update. Entries are case sensitive:")
-        userinput4 = input("What is the new value to enter:")
-        sql="UPDATE EXHIBITION SET " + attriinput4 +" =%s WHERE Name = %s"
-        value(userinput4,row4)
-        cursor.execute(sql,value)
-        museum.commit()
-
-def data_entry_menu():
-    pass
-
-def data_entry():
-    pass
-
-
-
 
 def admin_menu():
     choice=100
@@ -551,3 +542,5 @@ def main():
     modify_info()
 
 main()
+
+
