@@ -187,7 +187,6 @@ def end_user(user_type):
             exhibition=input("Please enter 1 if you want to search for a specific name\nPlease enter 2 if you want to see the exhibitions:")
         
             search_exhibition(exhibition)
-        choice = end_user_menu
         choice = end_user_menu(user_type)
     return
 
