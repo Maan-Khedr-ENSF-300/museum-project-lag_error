@@ -16,7 +16,8 @@ VALUES
 ('Zack', '13#%@KFFc', '2'),
 ('Joe', 'password', '1'),
 ('Zoe', '1234','1'),
-('ThatGuy', '20020202','1');
+('ThatGuy', '20020202','1'),
+('Lokko','ENSF300','3');
 
 
 DROP TABLE IF EXISTS Block_List;
