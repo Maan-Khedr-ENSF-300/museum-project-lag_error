@@ -72,7 +72,7 @@ def artist_search(artist_name):
         print("artist name is not valid")
         artist_name = input('Please enter a new artist name:')
         cur_museum.execute("select* from ARTIST where Name = %(Name)s",{'Name':artist_name})
-        
+        list_of_artist=cur_museum.fetchone()        
     
     cur_museum.execute("SELECT Name, Date_born, Date_die, Country, Epoch, Main_Style, Description from ARTIST where Name = %(Name)s",{'Name':artist_name})
     row_artist = cur_museum.fetchone()
@@ -97,6 +97,7 @@ def art_piece_search(art_piece):
         print("Your art_object not found")
         art_piece = input("Enter you art-piece name:")
         cur_museum.execute("select* from ART_OBJECT where Title = %(Title)s",{'Title':art_piece})
+        list_of_arobject = cur_museum.fetchone()
     cur_museum.execute("Select Id_num, Artist, Year, Title, Description, Country, Epoch, Style from ART_OBJECT where Title= %(Title)s",{'Title': art_piece})
     row_art_piece = cur_museum.fetchone()
     print("Name of the object: "+ str(row_art_piece[3]))
@@ -112,6 +113,7 @@ def colect_search(colect_name):
         print("Your art_object not found")
         colect_name = input("Please enter the collection you looking for: ")
         cur_museum.execute("select Name from COLLECTION where Name =%(Name)s", {'Name':colect_name})
+        list_of_collection =cur_museum.fetchone()
     cur_museum.execute("Select Name, Type, Description, Current_Pnumber from COLLECTION where Name =%(Name)s", {'Name':colect_name})
     row_collection =cur_museum.fetchone()
     for i in range(0,4):
@@ -132,8 +134,9 @@ def search_exhibition(exhibition):
             if exhibition_name == 'q':
                 return
             print("Your exhibtion is not found")
-            exhibtion_name =input("Type your exhibition you want to search: ")
+            exhibition_name =input("Type your exhibition you want to search: ")
             cur_museum.execute("select Name from EXHIBITION where Name =%(Name)s", {'Name':exhibition_name})
+            list_of_exhibition=cur_museum.fetchall()
         cur_museum.execute("Select Name, Start_date, End_date, End_date from EXHIBITION where Name =%(Name)s", {'Name':exhibition_name})
         row_exhibition= cur_museum.fetchone()
         print("Exhibition name: " +str(row_exhibition[0]) + " is found")
@@ -233,13 +236,13 @@ def add_tuples():
             Styleinput = input("Enter the style of the art: ")
             data = (idnoinput, artistinput, yearinput, titleinput, Dscrpinput, Cntryinput, Epocinput, Styleinput)
         if table == "artist":
-            nameinput = input("Enter the artist's name")
-            dborninput = input("Enter the year they were born")
-            ddieinput = input("Enter the year the artist died")
-            contryinput = input("Enter the country they are from")
-            epoch2input = input("Enter their era")
-            mstyleinput = input("Enter their main style")
-            descinput = input("Enter a description of them")
+            nameinput = input("Enter the artist's name: ")
+            dborninput = input("Enter the year they were born: ")
+            ddieinput = input("Enter the year the artist died: ")
+            contryinput = input("Enter the country they are from: ")
+            epoch2input = input("Enter their era: ")
+            mstyleinput = input("Enter their main style: ")
+            descinput = input("Enter a description of them: ")
             data = (nameinput, dborninput, ddieinput, contryinput, epoch2input, mstyleinput, descinput)
         if table == "collection":
             colnameinput = input("Enter the name of the collection")
@@ -259,15 +262,15 @@ def add_tuples():
         print("Data added correctly")
     if table == "artist":
         sql = "INSERT INTO ARTIST (Name, Date_born, Date_die, Country, Epoch, Main_Style, Description) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        cursor.executemany(sql,data)
+        cursor.execute(sql,data)
         print("Data added correctly.")
     if table == "collection":
         sql = "INSERT INTO COLLECTION (Name, Type, Description, Current_PNumber) VALUES (%s, %s, %s, %s)"
-        cursor.executemany(sql,data)
+        cursor.execute(sql,data)
         print("Data added correctly.")
     if table == "exhibition":
         sql = "INSERT INTO EXHIBITION (Name, Start_date, End_date) VALUES (%s, %s, %s)"
-        cursor.executemany(sql,data)
+        cursor.execute(sql,data)
         print("Data added correctly.")
     museum.commit()
 
@@ -417,6 +420,8 @@ def remove_info():
             print("Invalid Name")
             del_info = input("Please enter a Name or q for previous page: ")
             cur_museum.execute("Select * from ARTIST where Name =%(Name)s",{'Name':del_info})
+            museum_list = cur_museum.fetchone()
+
         
         cur_museum.execute("Select * from art_object Where Artist=%(Name)s",{'Name':del_info})
         museum_list = cur_museum.fetchone()
@@ -748,5 +753,3 @@ def main():
 
 if __name__=="__main__":
     main()
-
-
